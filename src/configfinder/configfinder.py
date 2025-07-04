@@ -27,19 +27,23 @@ def find_file(config_fname: str | PurePath) -> PurePath:
     raise FileNotFoundError(f"'{config_fname}' was not found")
 
 
-def config_walker(configuration, sub_config_keys: list[str]) -> Dict[[str], Any]:
+def config_walker(
+    configuration_dictionary: Dict[str, Any], sub_config_keys: list[str]
+) -> Dict[str, Any]:
     """goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys"""
 
     for i, key in enumerate(sub_config_keys):
-        if key in configuration:
-            configuration = configuration[key]
+        if key in configuration_dictionary:
+            configuration_dictionary = configuration_dictionary[key]
         else:
             raise ConfigNotFound(f"configuration {sub_config_keys[:i+1]} not found")
 
-    return configuration
+    return configuration_dictionary
 
 
-def configfinder(config_fname, sub_config_keys: list[str]) -> Dict[[str], Any]:
+def configfinder(
+    config_fname: str | PurePath, sub_config_keys: list[str]
+) -> Dict[str, Any]:
     """goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys"""
 
     fname = find_file(config_fname)
