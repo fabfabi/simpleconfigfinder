@@ -9,5 +9,19 @@ dependencies = []
 [dependency-groups]
 dev = [
     "mkdocs>=1.6.1",
+    "pytest>=8.4.1",
     "ruff>=0.12.2",
+]
+
+[configuration]
+
+sources = ["/src"]
+
+[tool.configfinder.testconfig]
+key = "value"
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+
 ]
