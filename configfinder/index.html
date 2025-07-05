@@ -193,7 +193,7 @@
 
 
 <h3 id="simpleconfigfinder.configfinder.config_finder" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">config_finder</span><span class="p">(</span><span class="n">config_fname</span><span class="p">,</span> <span class="n">sub_config_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">config_finder</span><span class="p">(</span><span class="n">config_fname</span><span class="p">,</span> <span class="n">sub_config_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 </h3>
 
@@ -201,6 +201,8 @@
     <div class="doc doc-contents ">
 
         <p>goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys</p>
+<p>In case there are multiple configuration files provided and keys are in multiple of them, the last occurence will be returned.
+The function is first executed and afterwards the results are combined</p>
 <p>Starts with the directory of the currently executed file (<strong>main</strong>.<strong>file</strong>) and searches upstream.</p>
 
 
@@ -216,10 +218,10 @@
         <ul class="first simple">
             <li>
               <b><code>config_fname</code></b>
-                  (<code><span title="str">str</span> | <span title="pathlib.PurePath">PurePath</span></code>)
+                  (<code><span title="str">str</span> | <span title="pathlib.PurePath">PurePath</span> | <span title="typing.Iterable">Iterable</span>[<span title="str">str</span>] | <span title="typing.Iterable">Iterable</span>[<span title="pathlib.PurePath">PurePath</span>]</code>)
               –
               <div class="doc-md-description">
-                <p>The name of the configuration file as toml or json</p>
+                <p>The name of the configuration file as toml or json. Multiple files can be provided. They will be combined</p>
               </div>
             </li>
             <li>
@@ -232,6 +234,13 @@
                 <p>A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.</p>
               </div>
             </li>
+            <li>
+              <b><code>raise_error</code></b>
+              –
+              <div class="doc-md-description">
+                <p>if errors will be raised in case any of the files are not found</p>
+              </div>
+            </li>
         </ul>
       </td>
     </tr>
@@ -240,48 +249,92 @@
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span>
-<span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span>
-<span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_finder</span><span class="p">(</span>
-    <span class="n">config_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PurePath</span><span class="p">,</span> <span class="n">sub_config_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_finder</span><span class="p">(</span>
+    <span class="n">config_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PurePath</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">PurePath</span><span class="p">],</span>
+    <span class="n">sub_config_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys</span>
 
+<span class="sd">    In case there are multiple configuration files provided and keys are in multiple of them, the last occurence will be returned.</span>
+<span class="sd">    The function is first executed and afterwards the results are combined</span>
 
 <span class="sd">    Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        config_fname: The name of the configuration file as toml or json</span>
-<span class="sd">        sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.&quot;&quot;&quot;</span>
+<span class="sd">        config_fname: The name of the configuration file as toml or json. Multiple files can be provided. They will be combined</span>
+<span class="sd">        sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.</span>
+<span class="sd">        raise_error: if errors will be raised in case any of the files are not found&quot;&quot;&quot;</span>
 
-    <span class="n">extension</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config_fname</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span>
+    <span class="c1"># iteratively call the function for all individual entries</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">config_fname</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">configuration</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="p">[</span>
+            <span class="n">configuration</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">config_finder</span><span class="p">(</span>
+                    <span class="n">name</span><span class="p">,</span> <span class="n">sub_config_keys</span><span class="o">=</span><span class="n">sub_config_keys</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="n">raise_error</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">config_fname</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">configuration</span>
+
+    <span class="c1"># this path will only happen for single entries</span>
+    <span class="n">extension</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config_fname</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span>  <span class="c1"># type: ignore since list values are handled above</span>
 
     <span class="n">reader_dictionary</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;.toml&quot;</span><span class="p">:</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">,</span> <span class="s2">&quot;.json&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">}</span>
 
@@ -290,7 +343,13 @@
 
     <span class="n">reader</span> <span class="o">=</span> <span class="n">reader_dictionary</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span>
 
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">)</span>  <span class="c1"># type: ignore since list values are handled above</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">raise_error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">err</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">configuration</span> <span class="o">=</span> <span class="n">reader</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
