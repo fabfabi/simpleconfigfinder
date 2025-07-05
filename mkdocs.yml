@@ -1,6 +1,13 @@
 site_name: Config Finder
 repo_url: https://github.com/fabfabi/configfinder
 
+theme:
+  name: readthedocs
+  hljs_languages:
+    - python
+    - toml
+    - json
+    - yaml
 plugins:
 - mkdocstrings:
     enabled: !ENV [ENABLE_MKDOCSTRINGS, true]
@@ -8,10 +15,12 @@ plugins:
     handlers:
       python:
         paths: [src]  # search packages in the src folder
+        options:
+          show_submodules: true
+          docstring_style: google
     watch:
-      - src/configfinder
-    show_submodules: true
+      - src/simpleconfigfinder
 
 nav:
   - Start: 'index.md'
-  - configfinder: 'configfinder.md'
+  - Code: 'configfinder.md'

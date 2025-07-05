@@ -1,3 +1,4 @@
+import json
 import tomllib
 from pathlib import Path, PurePath
 from typing import Any, Dict, Optional
@@ -11,15 +12,10 @@ class ConfigNotFound(Exception):
     pass
 
 
-file_finder_logic = (
-    """Starts with the directory of the currently executed file (__main__.__file__)"""
-)
-
-
 def find_file(config_fname: str | PurePath) -> PurePath:
-    f"""finds the configuration file by checking every parent directory.
+    """finds the configuration file by checking every parent directory.
 
-    {file_finder_logic}
+    Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.
 
     Args:
         config_fname: the name of the configuration file"""
@@ -53,24 +49,28 @@ def config_walker(
 def config_finder(
     config_fname: str | PurePath, sub_config_keys: Optional[list[str]] = None
 ) -> Dict[str, Any]:
-    f"""goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys
+    """goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys
 
 
-    {file_finder_logic}
+    Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.
 
     Args:
-        config_fname: The name of the configuration file
+        config_fname: The name of the configuration file as toml or json
         sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided."""
 
     extension = Path(config_fname).suffix
 
-    if extension != ".toml":
+    reader_dictionary = {".toml": tomllib.load, ".json": json.load}
+
+    if extension not in reader_dictionary:
         raise NotImplementedError(f"config finder not implmeneted for '{extension}'")
+
+    reader = reader_dictionary[extension]
 
     fname = find_file(config_fname)
 
     with open(fname, "rb") as file:
-        configuration = tomllib.load(file)
+        configuration = reader(file)
 
     if sub_config_keys is None:
         return configuration

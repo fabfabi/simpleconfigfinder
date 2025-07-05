@@ -1,3 +1,3 @@
-# configfinder
+# Code
 
-::: configfinder
+::: simpleconfigfinder

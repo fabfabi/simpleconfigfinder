@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 import __main__
@@ -7,6 +9,19 @@ from simpleconfigfinder.configfinder import (
     config_walker,
     find_file,
 )
+
+dictionary_test = {
+    "a": {
+        "b1": {
+            "c": 1,
+            "d": 2,
+        },
+        "b2": {
+            "c": 10,
+            "d": 22,
+        },
+    },
+}
 
 
 def test_file_finder(tmp_path):
@@ -26,19 +41,6 @@ def test_file_finder(tmp_path):
 
 
 def test_config_walker():
-    dictionary_test = {
-        "a": {
-            "b1": {
-                "c": 1,
-                "d": 2,
-            },
-            "b2": {
-                "c": 10,
-                "d": 22,
-            },
-        },
-    }
-
     assert config_walker(dictionary_test, ["a", "b1"]) == {
         "c": 1,
         "d": 2,
@@ -57,7 +59,7 @@ def test_config_walker():
 
 
 def test_config_finder(tmp_path):
-    test_input = [
+    test_input_toml = [
         "[a.b1]",
         "c = 1",
         "d = 2",
@@ -65,16 +67,26 @@ def test_config_finder(tmp_path):
         "c = 10",
         "d = 22",
     ]
-    fname = "test.toml"
-    file_config = tmp_path / fname
+
     file_python = tmp_path / "some_program.py"
 
-    file_config.write_text("\n".join(s for s in test_input))
+    file_toml = "test.toml"
+    file_config_toml = tmp_path / file_toml
+    file_config_toml.write_text("\n".join(s for s in test_input_toml))
+
+    file_json = "test.json"
+    file_config_json = tmp_path / file_json
+    file_config_json.write_text(json.dumps(dictionary_test))
 
     with pytest.MonkeyPatch.context() as context:
         context.setattr(__main__, "__file__", file_python)
 
-        assert config_finder(fname, ["a", "b1"]) == {
+        assert config_finder(file_toml, ["a", "b1"]) == {
+            "c": 1,
+            "d": 2,
+        }
+
+        assert config_finder(file_json, ["a", "b1"]) == {
             "c": 1,
             "d": 2,
         }
