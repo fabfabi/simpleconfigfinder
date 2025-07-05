@@ -1,10 +1,12 @@
 # Config Finder
 Finds a configuration file (e.g. pyproject.toml) and returns some sub-configuration with only python standard libraries.
 
-Supported formats:
 
-* [TOML](https://en.wikipedia.org/wiki/TOML)
-* [JSON](https://en.wikipedia.org/wiki/JSON)
+!!! note
+    supported formats
+
+    * [TOML](https://en.wikipedia.org/wiki/TOML)
+    * [JSON](https://en.wikipedia.org/wiki/JSON)
 
 ## Algorighm
 
@@ -18,7 +20,7 @@ When defining machine learning projects and handling the project configuration b
 
     [tool.some_tool]
     key1 = "some_value_1"
-    key2  = "some_value_2"
+    key2 = "some_value_2"
 
     [tool.some_tool.default_config]
     important_key = "some_value"
@@ -26,11 +28,19 @@ When defining machine learning projects and handling the project configuration b
     [tool.some_tool.special_config]
     important_key = "another_value"
 
-This way, instead of defining global variables in your code or using [dotenv](https://pypi.org/project/python-dotenv/), you can very easily set these up via a configuration file such as the pyproject.toml. and access via
+!!! tip
+    Instead of defining global variables in your code or using [dotenv](https://pypi.org/project/python-dotenv/), a configuration file such as the pyproject.toml can be used to store configurations.
 
-    find_configuration("pyproject.toml", ["tool"])
+Access works via
 
-This also works for handling credentials.
+    ```python 
+    find_configuration("pyproject.toml", ["tool", "some_tool", "default_config"])
+    ```
+    ```
+    {"important_key" : "some_value"}    
+    ```
 
-Important:
+This function can also be used to handle credentials.
+
+!!! caution
     Do not write your credentials into the pyproject.toml and ensure that you do not check your credentials into the source control.

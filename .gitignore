@@ -2,3 +2,5 @@ test.py
 
 *.pyc
 settings.json
+
+/site/*
