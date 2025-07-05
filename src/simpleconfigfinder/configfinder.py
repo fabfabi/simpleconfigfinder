@@ -1,3 +1,4 @@
+import collections.abc
 import json
 import tomllib
 from pathlib import Path, PurePath
@@ -32,6 +33,23 @@ def find_file(config_fname: str | PurePath) -> PurePath:
     raise FileNotFoundError(f"'{config_fname}' was not found")
 
 
+def combine_dictionaries(dict_a, dict_b):
+    """combine two dictionaries on a granular level
+
+    !!! important:
+        this function modifies the original dicitionaries. If this matters, enter a deepcopy.
+    """
+    for k, v in dict_a.items():
+        if isinstance(v, collections.abc.Mapping):
+            dict_b[k] = combine_dictionaries(dict_b.get(k, {}), v)
+        else:
+            dict_b[k] = v
+    missing_keys = {k: v for k, v in dict_b.items() if k not in dict_a}
+    dict_b.update(missing_keys)
+
+    return dict_b
+
+
 def config_walker(
     configuration_dictionary: Dict[str, Any], sub_config_keys: list[str]
 ) -> Dict[str, Any]:
@@ -53,28 +71,12 @@ def config_finder(
 ) -> Dict[str, Any]:
     """goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys
 
-    In case there are multiple configuration files provided and keys are in multiple of them, the last occurence will be returned.
-    The function is first executed and afterwards the results are combined
-
     Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.
 
     Args:
         config_fname: The name of the configuration file as toml or json. Multiple files can be provided. They will be combined
         sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.
         raise_error: if errors will be raised in case any of the files are not found"""
-
-    # iteratively call the function for all individual entries
-    if type(config_fname) is list:
-        configuration = {}
-        [
-            configuration.update(
-                config_finder(
-                    name, sub_config_keys=sub_config_keys, raise_error=raise_error
-                )
-            )
-            for name in config_fname
-        ]
-        return configuration
 
     # this path will only happen for single entries
     extension = Path(config_fname).suffix  # type: ignore since list values are handled above
@@ -96,6 +98,37 @@ def config_finder(
 
     with open(fname, "rb") as file:
         configuration = reader(file)
+
+    if sub_config_keys is None:
+        return configuration
+
+    return config_walker(configuration, sub_config_keys)
+
+
+def multi_config_finder(
+    config_fname_list: list[str] | list[PurePath],
+    sub_config_keys: Optional[list[str]] = None,
+    raise_error=True,
+) -> Dict[str, Any]:
+    """goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys
+
+    In case there are multiple configuration files provided and keys are in multiple of them, the last occurence will be returned.
+    The function is first executed and afterwards the results are combined
+
+    Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.
+
+    Args:
+        config_fname: The name of the configuration file as toml or json. Multiple files can be provided. They will be combined
+        sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.
+        raise_error: if errors will be raised in case any of the files are not found"""
+
+    configs_all = [
+        config_finder(file, raise_error=raise_error) for file in config_fname_list
+    ]
+    configuration = configs_all.pop()
+
+    for cfg in configs_all:
+        configuration = combine_dictionaries(configuration, cfg)
 
     if sub_config_keys is None:
         return configuration

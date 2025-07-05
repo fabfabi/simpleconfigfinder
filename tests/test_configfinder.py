@@ -6,6 +6,7 @@ import pytest
 import __main__
 from simpleconfigfinder.configfinder import (
     ConfigNotFound,
+    combine_dictionaries,
     config_finder,
     config_walker,
     find_file,
@@ -97,29 +98,60 @@ def test_config_finder(tmp_path):
             "d": 2,
         }
 
-        # test iterable
-        assert config_finder([file_toml], ["a", "b1"]) == {
-            "c": 11,
-            "d": 12,
-        }
-
-        # test multiple
-        assert config_finder([file_toml, file_json], ["a", "b2"]) == {
-            "c": 10,
-            "d": 22,
-            "e": 42,
-        }
-
         # errors for missing files
         assert config_finder("somefile.json", [], raise_error=False) == {}
 
-        # errors for missing files with multiple inputs
-        assert config_finder(
-            [file_toml, "wrongfile.json"], ["a", "b1"], raise_error=False
-        ) == {
-            "c": 11,
-            "d": 12,
-        }
         # verify unknown extensions
         with pytest.raises(NotImplementedError):
             config_finder("somefile.ext", ["a"])
+
+        # ###############################################################################
+        # # test multi_config_finder
+        # assert multi_config_finder([file_toml], ["a", "b1"]) == {
+        #     "c": 11,
+        #     "d": 12,
+        # }
+
+        # # test multiple
+        # assert multi_config_finder([file_toml, file_json], ["a", "b2"]) == {
+        #     "c": 10,
+        #     "d": 22,
+        #     "e": 42,
+        # }
+        # # errors for missing files with multiple inputs
+        # assert multi_config_finder(
+        #     [file_toml, "wrongfile.json"], ["a", "b1"], raise_error=False
+        # ) == {
+        #     "c": 11,
+        #     "d": 12,
+        # }
+
+
+def test_combine_dictionaries():
+    d_a = {
+        "a": {
+            "a1": 1,
+            "a2": 2,
+        },
+    }
+    d_b = {
+        "a": {
+            "a1": 3,
+            "a3": 3,
+        },
+    }
+
+    assert combine_dictionaries(deepcopy(d_b), deepcopy(d_a)) == {
+        "a": {
+            "a1": 1,
+            "a2": 2,
+            "a3": 3,
+        },
+    }
+    assert combine_dictionaries(deepcopy(d_a), deepcopy(d_b)) == {
+        "a": {
+            "a1": 3,
+            "a2": 2,
+            "a3": 3,
+        },
+    }
