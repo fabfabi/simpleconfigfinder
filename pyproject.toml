@@ -1,6 +1,6 @@
 [project]
 name = "simpleconfigfinder"
-version = "0.2.1"
+version = "0.2.2"
 description = "Minimalistic configuration finder with standard Python libraries."
 readme = "docs/index.md"
 requires-python = ">=3.12"

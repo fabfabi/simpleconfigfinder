@@ -1,4 +1,5 @@
 import json
+from copy import deepcopy
 
 import pytest
 
@@ -55,17 +56,17 @@ def test_config_walker():
         config_walker(dictionary_test, ["a", "b3"])
 
     with pytest.raises(ConfigNotFound):
-        config_walker(dictionary_test, ["b", "b3"])
+        config_walker(dictionary_test, ["a", "b3"])
 
 
 def test_config_finder(tmp_path):
     test_input_toml = [
         "[a.b1]",
-        "c = 1",
-        "d = 2",
+        "c = 11",
+        "d = 12",
         "[a.b2]",
-        "c = 10",
-        "d = 22",
+        "c = 31",
+        "e = 42",
     ]
 
     file_python = tmp_path / "some_program.py"
@@ -74,6 +75,9 @@ def test_config_finder(tmp_path):
     file_config_toml = tmp_path / file_toml
     file_config_toml.write_text("\n".join(s for s in test_input_toml))
 
+    dt = deepcopy(dictionary_test)
+    dt["a"]["b1"]
+
     file_json = "test.json"
     file_config_json = tmp_path / file_json
     file_config_json.write_text(json.dumps(dictionary_test))
@@ -81,15 +85,41 @@ def test_config_finder(tmp_path):
     with pytest.MonkeyPatch.context() as context:
         context.setattr(__main__, "__file__", file_python)
 
+        # test TOML
         assert config_finder(file_toml, ["a", "b1"]) == {
-            "c": 1,
-            "d": 2,
+            "c": 11,
+            "d": 12,
         }
 
+        # test JSON
         assert config_finder(file_json, ["a", "b1"]) == {
             "c": 1,
             "d": 2,
         }
 
-    with pytest.raises(NotImplementedError):
-        config_finder("somefile.ext", ["a"])
+        # test iterable
+        assert config_finder([file_toml], ["a", "b1"]) == {
+            "c": 11,
+            "d": 12,
+        }
+
+        # test multiple
+        assert config_finder([file_toml, file_json], ["a", "b2"]) == {
+            "c": 10,
+            "d": 22,
+            "e": 42,
+        }
+
+        # errors for missing files
+        assert config_finder("somefile.json", [], raise_error=False) == {}
+
+        # errors for missing files with multiple inputs
+        assert config_finder(
+            [file_toml, "wrongfile.json"], ["a", "b1"], raise_error=False
+        ) == {
+            "c": 11,
+            "d": 12,
+        }
+        # verify unknown extensions
+        with pytest.raises(NotImplementedError):
+            config_finder("somefile.ext", ["a"])

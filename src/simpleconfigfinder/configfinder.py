@@ -1,7 +1,7 @@
 import json
 import tomllib
 from pathlib import Path, PurePath
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Iterable, Optional
 
 import __main__
 
@@ -47,18 +47,37 @@ def config_walker(
 
 
 def config_finder(
-    config_fname: str | PurePath, sub_config_keys: Optional[list[str]] = None
+    config_fname: str | PurePath | Iterable[str] | Iterable[PurePath],
+    sub_config_keys: Optional[list[str]] = None,
+    raise_error=True,
 ) -> Dict[str, Any]:
     """goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys
 
+    In case there are multiple configuration files provided and keys are in multiple of them, the last occurence will be returned.
+    The function is first executed and afterwards the results are combined
 
     Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.
 
     Args:
-        config_fname: The name of the configuration file as toml or json
-        sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided."""
+        config_fname: The name of the configuration file as toml or json. Multiple files can be provided. They will be combined
+        sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.
+        raise_error: if errors will be raised in case any of the files are not found"""
 
-    extension = Path(config_fname).suffix
+    # iteratively call the function for all individual entries
+    if type(config_fname) is list:
+        configuration = {}
+        [
+            configuration.update(
+                config_finder(
+                    name, sub_config_keys=sub_config_keys, raise_error=raise_error
+                )
+            )
+            for name in config_fname
+        ]
+        return configuration
+
+    # this path will only happen for single entries
+    extension = Path(config_fname).suffix  # type: ignore since list values are handled above
 
     reader_dictionary = {".toml": tomllib.load, ".json": json.load}
 
@@ -67,7 +86,13 @@ def config_finder(
 
     reader = reader_dictionary[extension]
 
-    fname = find_file(config_fname)
+    try:
+        fname = find_file(config_fname)  # type: ignore since list values are handled above
+    except FileNotFoundError as err:
+        if raise_error:
+            raise err
+        else:
+            return {}
 
     with open(fname, "rb") as file:
         configuration = reader(file)
