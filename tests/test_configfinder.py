@@ -1,6 +1,6 @@
 import pytest
 
-from configfinder.configfinder import (
+from simpleconfigfinder.configfinder import (
     ConfigNotFound,
     config_finder,
     config_walker,

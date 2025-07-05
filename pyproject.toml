@@ -34,9 +34,9 @@ testpaths = [
 [build-system]
 requires = ["uv_build>=0.7.8,<0.8"]
 build-backend = "uv_build"
-module-name = "configfinder"
+module-name = "simpleconfigfinder"
 module-root = "src"
 
 [project.urls]
-Homepage = "https://github.com/fabfabi/configfinder"
-Issues = "https://github.com/fabfabi/configfinder/issues"
+Homepage = "https://github.com/fabfabi/simpleconfigfinder"
+Issues = "https://github.com/fabfabi/simpleconfigfinder/issues"
