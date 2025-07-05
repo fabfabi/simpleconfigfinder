@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="None" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Config Finder</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Start";
+        var mkdocs_page_input_path = "index.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/toml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/json.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> Config Finder
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Start</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#algorighm">Algorighm</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#use-case">Use Case</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="configfinder/">Code</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">Config Finder</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Start</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/fabfabi/configfinder/edit/master/docs/index.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="config-finder">Config Finder</h1>
+<p>Finds a configuration file (e.g. pyproject.toml) and returns some sub-configuration with only python standard libraries.</p>
+<p>Supported formats:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/TOML">TOML</a></li>
+<li><a href="https://en.wikipedia.org/wiki/JSON">JSON</a></li>
+</ul>
+<h2 id="algorighm">Algorighm</h2>
+<ol>
+<li>starts from the currently executed file (__main__.__file__)</li>
+<li>Checks if that folder contains the desired configuration file</li>
+<li>Goes to the parent directory and repeats at 2</li>
+</ol>
+<h2 id="use-case">Use Case</h2>
+<p>When defining machine learning projects and handling the project configuration by e.g. a <a href="https://packaging.python.org/en/latest/guides/writing-pyproject-toml/">pyproject.toml</a> (e.g. with <a href="https://docs.astral.sh/uv/">Astral UV</a> or  <a href="https://python-poetry.org/">Poetry</a>) you can utilize the configuration files to define and store important variables.</p>
+<pre><code>[tool.some_tool]
+key1 = "some_value_1"
+key2  = "some_value_2"
+
+[tool.some_tool.default_config]
+important_key = "some_value"
+
+[tool.some_tool.special_config]
+important_key = "another_value"
+</code></pre>
+<p>This way, instead of defining global variables in your code or using <a href="https://pypi.org/project/python-dotenv/">dotenv</a>, you can very easily set these up via a configuration file such as the pyproject.toml. and access via</p>
+<pre><code>find_configuration("pyproject.toml", ["tool"])
+</code></pre>
+<p>This also works for handling credentials.</p>
+<p>Important:
+    Do not write your credentials into the pyproject.toml and ensure that you do not check your credentials into the source control.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="configfinder/" class="btn btn-neutral float-right" title="Code">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/fabfabi/configfinder" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+      <span><a href="configfinder/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.6.1
+Build Date UTC : 2025-07-05 09:35:51.712017+00:00
+-->
