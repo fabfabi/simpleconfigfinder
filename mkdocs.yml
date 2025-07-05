@@ -1,0 +1,17 @@
+site_name: Config Finder
+repo_url: https://github.com/fabfabi/configfinder
+
+plugins:
+- mkdocstrings:
+    enabled: !ENV [ENABLE_MKDOCSTRINGS, true]
+    default_handler: python
+    handlers:
+      python:
+        paths: [src]  # search packages in the src folder
+    watch:
+      - src/configfinder
+    show_submodules: true
+
+nav:
+  - Start: 'index.md'
+  - configfinder: 'configfinder.md'
