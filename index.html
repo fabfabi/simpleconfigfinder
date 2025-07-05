@@ -80,11 +80,14 @@
               
                 <h1 id="config-finder">Config Finder</h1>
 <p>Finds a configuration file (e.g. pyproject.toml) and returns some sub-configuration with only python standard libraries.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>Supported formats:</p>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/TOML">TOML</a></li>
 <li><a href="https://en.wikipedia.org/wiki/JSON">JSON</a></li>
 </ul>
+</div>
 <h2 id="algorighm">Algorighm</h2>
 <ol>
 <li>starts from the currently executed file (__main__.__file__)</li>
@@ -95,7 +98,7 @@
 <p>When defining machine learning projects and handling the project configuration by e.g. a <a href="https://packaging.python.org/en/latest/guides/writing-pyproject-toml/">pyproject.toml</a> (e.g. with <a href="https://docs.astral.sh/uv/">Astral UV</a> or  <a href="https://python-poetry.org/">Poetry</a>) you can utilize the configuration files to define and store important variables.</p>
 <pre><code>[tool.some_tool]
 key1 = "some_value_1"
-key2  = "some_value_2"
+key2 = "some_value_2"
 
 [tool.some_tool.default_config]
 important_key = "some_value"
@@ -103,12 +106,23 @@ important_key = "some_value"
 [tool.some_tool.special_config]
 important_key = "another_value"
 </code></pre>
-<p>This way, instead of defining global variables in your code or using <a href="https://pypi.org/project/python-dotenv/">dotenv</a>, you can very easily set these up via a configuration file such as the pyproject.toml. and access via</p>
-<pre><code>find_configuration("pyproject.toml", ["tool"])
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Instead of defining global variables in your code or using <a href="https://pypi.org/project/python-dotenv/">dotenv</a>, a configuration file such as the pyproject.toml can be used to store configurations.</p>
+</div>
+<p>Access works via</p>
+<pre><code>```python 
+find_configuration("pyproject.toml", ["tool", "some_tool", "default_config"])
+```
+```
+{"important_key" : "some_value"}    
+```
 </code></pre>
-<p>This also works for handling credentials.</p>
-<p>Important:
-    Do not write your credentials into the pyproject.toml and ensure that you do not check your credentials into the source control.</p>
+<p>This function can also be used to handle credentials.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>Do not write your credentials into the pyproject.toml and ensure that you do not check your credentials into the source control.</p>
+</div>
               
             </div>
           </div><footer>
@@ -160,5 +174,5 @@ important_key = "another_value"
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-07-05 09:35:51.712017+00:00
+Build Date UTC : 2025-07-05 09:59:53.952721+00:00
 -->
