@@ -36,3 +36,7 @@ requires = ["uv_build>=0.7.8,<0.8"]
 build-backend = "uv_build"
 module-name = "configfinder"
 module-root = "src"
+
+[project.urls]
+Homepage = "https://github.com/fabfabi/configfinder"
+Issues = "https://github.com/fabfabi/configfinder/issues"
