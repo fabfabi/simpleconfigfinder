@@ -1,11 +1,12 @@
 # Config Finder
-Finds a configuration file (e.g. pyproject.toml) and returns some sub-configuration with only python standard libraries.
+Finds a configuration file (e.g. pyproject.toml) and returns some sub-configuration by only using python standard libraries.
 
 
 Supported formats:
 
 * [TOML](https://en.wikipedia.org/wiki/TOML)
 * [JSON](https://en.wikipedia.org/wiki/JSON)
+* [YAML](https://en.wikipedia.org/wiki/YAML) (see [Documentation](https://fabfabi.github.io/simpleconfigfinder/) how to enable)
 
 
 ## Use Case
@@ -13,4 +14,4 @@ When defining machine learning projects and handling the project configuration b
 
 Instead of defining global variables in your code or using [dotenv](https://pypi.org/project/python-dotenv/), a configuration file such as the pyproject.toml can be used for those values.
 
-[Link to Documentation](https://fabfabi.github.io/configfinder/)
+[Link to Documentation](https://fabfabi.github.io/simpleconfigfinder/)
