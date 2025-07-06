@@ -2,6 +2,7 @@ import json
 from copy import deepcopy
 
 import pytest
+import yaml
 
 import __main__
 from simpleconfigfinder.configfinder import (
@@ -73,16 +74,24 @@ def test_config_finder(tmp_path):
 
     file_python = tmp_path / "some_program.py"
 
+    def mock_file(name, content):
+        file = tmp_path / name
+        file.write_text(content)
+
     file_toml = "test.toml"
-    file_config_toml = tmp_path / file_toml
-    file_config_toml.write_text("\n".join(s for s in test_input_toml))
+    mock_file(file_toml, "\n".join(s for s in test_input_toml))
 
     dt = deepcopy(dictionary_test)
     dt["a"]["b1"]
 
     file_json = "test.json"
-    file_config_json = tmp_path / file_json
-    file_config_json.write_text(json.dumps(dictionary_test))
+    mock_file(file_json, json.dumps(dictionary_test))
+
+    file_json_like = "test.jsonlike"
+    mock_file(file_json_like, json.dumps(dictionary_test))
+
+    file_yaml = "test.yaml"
+    mock_file(file_yaml, yaml.dump(dictionary_test))
 
     with pytest.MonkeyPatch.context() as context:
         context.setattr(__main__, "__file__", file_python)
@@ -104,8 +113,23 @@ def test_config_finder(tmp_path):
 
         # verify unknown extensions
         with pytest.raises(NotImplementedError):
-            config_finder("somefile.ext", ["a"])
+            config_finder(file_json_like, ["a"])
 
+        # still works with the matchin reader
+        assert config_finder(
+            file_json_like, ["a", "b1"], additional_readers={"jsonlike": json.load}
+        ) == {
+            "c": 1,
+            "d": 2,
+        }
+
+        # test the yaml reader
+        assert config_finder(
+            file_yaml, ["a", "b1"], additional_readers={"yaml": yaml.safe_load}
+        ) == {
+            "c": 1,
+            "d": 2,
+        }
         ###############################################################################
         # test multi_config_finder
         assert multi_config_finder([file_toml], ["a", "b1"]) == {

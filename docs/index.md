@@ -15,7 +15,7 @@ Finds a configuration file (e.g. pyproject.toml) and returns some sub-configurat
 3. Goes to the parent directory and repeats at 2
 
 
-## Use Case
+# Use Case
 When defining machine learning projects and handling the project configuration by e.g. a [pyproject.toml](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/) (e.g. with [Astral UV](https://docs.astral.sh/uv/) or  [Poetry](https://python-poetry.org/)) you can utilize the configuration files to define and store important variables.
 
     [tool.some_tool]
@@ -33,14 +33,25 @@ When defining machine learning projects and handling the project configuration b
 
 Access works via
 
-    ```python 
+
     find_configuration("pyproject.toml", ["tool", "some_tool", "default_config"])
-    ```
-    ```
+
     {"important_key" : "some_value"}    
-    ```
+    
 
 This function can also be used to handle credentials.
 
 !!! caution
     Do not write your credentials into the pyproject.toml and ensure that you do not check your credentials into the source control.
+
+# Other Readers
+Other readers can be added. e.g. [YAML](https://en.wikipedia.org/wiki/YAML) support via [PyYAML](https://pyyaml.org/) can work like this:
+
+    
+    import yaml
+    from simpleconfigfinder import config_finder
+
+    config_finder(
+            "some_file.yaml", additional_readers={"yaml": yaml.safe_load}
+        )
+    

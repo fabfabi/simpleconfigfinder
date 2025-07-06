@@ -2,7 +2,7 @@ import collections.abc
 import json
 import tomllib
 from pathlib import Path, PurePath
-from typing import Any, Dict, Iterable, Optional
+from typing import Any, Callable, Dict, Optional
 
 import __main__
 
@@ -80,9 +80,10 @@ def config_walker(
 
 
 def config_finder(
-    config_fname: str | PurePath | Iterable[str] | Iterable[PurePath],
+    config_fname: str | PurePath,
     sub_config_keys: Optional[list[str]] = None,
     raise_error=True,
+    additional_readers: Optional[Dict[str, Callable[[Any], Dict[str, Any]]]] = None,
 ) -> Dict[str, Any]:
     """goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys
 
@@ -91,15 +92,21 @@ def config_finder(
     Args:
         config_fname: The name of the configuration file as toml or json. Multiple files can be provided. They will be combined
         sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.
-        raise_error: if errors will be raised in case any of the files are not found"""
+        raise_error: if errors will be raised in case any of the files are not found
+        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml). Example format is  {"json": json.load}
+    """
 
-    # this path will only happen for single entries
-    extension = Path(config_fname).suffix  # type: ignore since list values are handled above
+    # cut the leading dot
+    extension = Path(config_fname).suffix[1:]
 
-    reader_dictionary = {".toml": tomllib.load, ".json": json.load}
+    reader_dictionary = {"toml": tomllib.load, "json": json.load}
+    if additional_readers:
+        reader_dictionary.update(additional_readers)
 
     if extension not in reader_dictionary:
-        raise NotImplementedError(f"config finder not implmeneted for '{extension}'")
+        raise NotImplementedError(
+            f"config finder not implmeneted for '{extension}'. Use any of '{reader_dictionary.keys()}'"
+        )
 
     reader = reader_dictionary[extension]
 
@@ -124,21 +131,29 @@ def multi_config_finder(
     config_fname_list: list[str] | list[PurePath],
     sub_config_keys: Optional[list[str]] = None,
     raise_error=True,
+    additional_readers: Optional[Dict[str, Callable[[Any], Dict[str, Any]]]] = None,
 ) -> Dict[str, Any]:
     """goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys
 
-    In case there are multiple configuration files provided and keys are in multiple of them, the last occurence will be returned.
-    The function is first executed and afterwards the results are combined
-
     Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.
+
+    In case there are multiple configuration files provided and keys are in multiple of them, the first occurence will be returned.
+    This function first combines all files and afterwards applies the sub_config_keys
 
     Args:
         config_fname: The name of the configuration file as toml or json. Multiple files can be provided. They will be combined
         sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.
-        raise_error: if errors will be raised in case any of the files are not found"""
+        raise_error: if errors will be raised in case any of the files are not found
+        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml). Example format is  {".json": json.load}
+    """
 
     configs_all = [
-        config_finder(file, raise_error=raise_error) for file in config_fname_list
+        config_finder(
+            config_fname=file,
+            raise_error=raise_error,
+            additional_readers=additional_readers,
+        )
+        for file in config_fname_list
     ]
     configuration = configs_all.pop()
 

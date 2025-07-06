@@ -708,6 +708,7 @@ dev = [
     { name = "mkdocs" },
     { name = "mkdocstrings", extra = ["python"] },
     { name = "pytest" },
+    { name = "pyyaml" },
     { name = "ruff" },
 ]
 
@@ -719,6 +720,7 @@ dev = [
     { name = "mkdocs", specifier = ">=1.6.1" },
     { name = "mkdocstrings", extras = ["python"], specifier = ">=0.29.1" },
     { name = "pytest", specifier = ">=8.4.1" },
+    { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "ruff", specifier = ">=0.12.2" },
 ]
 

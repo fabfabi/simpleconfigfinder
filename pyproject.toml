@@ -1,6 +1,6 @@
 [project]
 name = "simpleconfigfinder"
-version = "0.2.3"
+version = "0.3.0"
 description = "Minimalistic configuration finder with standard Python libraries."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -13,6 +13,7 @@ dev = [
     "mkdocs>=1.6.1",
     "mkdocstrings[python]>=0.29.1",
     "pytest>=8.4.1",
+    "pyyaml>=6.0.2",
     "ruff>=0.12.2",
 ]
 
@@ -38,6 +39,6 @@ module-name = "simpleconfigfinder"
 module-root = "src"
 
 [project.urls]
-Homepage = "https://fabfabi.github.io/configfinder/"
+Homepage = "https://fabfabi.github.io/simpleconfigfinder/"
 Issues = "https://github.com/fabfabi/simpleconfigfinder/issues"
 Repository = "https://github.com/fabfabi/simpleconfigfinder"
