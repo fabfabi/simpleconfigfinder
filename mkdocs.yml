@@ -30,8 +30,6 @@ plugins:
           show_submodules: true
           separate_signature: true #converts function names to titles
           docstring_style: google
-    watch:
-      - src/simpleconfigfinder
 - search
 
 nav:

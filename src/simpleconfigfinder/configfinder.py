@@ -49,27 +49,27 @@ def combine_dictionaries(dict_a, dict_b):
         Combined dictionary of both dict_a and dict_b. Values from dict_a have priority over dict_b. If some values are dictionaries, they will be combined recursively.
 
     Examples:
-    >>> combine_dictionaries({"a" : 1}, {"b" : 2})
-    {'b': 2, 'a': 1}
+        >>> combine_dictionaries({"a" : 1}, {"b" : 2})
+        {'b': 2, 'a': 1}
 
-    >>> combine_dictionaries({"a" : {"c" : 3}}, {"a" : {"c" : 4}})
-    {'a': {'c': 3}}
+        >>> combine_dictionaries({"a" : {"c" : 3}}, {"a" : {"c" : 4}})
+        {'a': {'c': 3}}
 
-    >>> combine_dictionaries({"a" : {"c" : 3}}, {"a" : {"e" : 5}})
-    {'a': {'e': 5, 'c': 3}}
+        >>> combine_dictionaries({"a" : {"c" : 3}}, {"a" : {"e" : 5}})
+        {'a': {'e': 5, 'c': 3}}
 
-    >>> some_dictionary = {"a" : 1} # to show changes
-    >>> combine_dictionaries({"b" : 2}, some_dictionary)
-    {'a': 1, 'b': 2}
-    >>> some_dictionary # ATTENTION: modified
-    {'a': 1, 'b': 2}
+        >>> some_dictionary = {"a" : 1} # to show changes
+        >>> combine_dictionaries({"b" : 2}, some_dictionary)
+        {'a': 1, 'b': 2}
+        >>> some_dictionary # ATTENTION: modified
+        {'a': 1, 'b': 2}
 
-    >>> from copy import deepcopy
-    >>> some_dictionary = {"a" : 1}
-    >>> combine_dictionaries({"b" : 2}, deepcopy(some_dictionary))
-    {'a': 1, 'b': 2}
-    >>> some_dictionary
-    {'a': 1}
+        >>> from copy import deepcopy
+        >>> some_dictionary = {"a" : 1}
+        >>> combine_dictionaries({"b" : 2}, deepcopy(some_dictionary))
+        {'a': 1, 'b': 2}
+        >>> some_dictionary
+        {'a': 1}
     """
 
     def check_instance(db):
@@ -119,13 +119,25 @@ def config_finder(
 ) -> Dict[str, Any]:
     """goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys
 
-    Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.
+    Starts with the directory of the currently executed file (\_\_main\_\_.\_\_file\_\_) and searches upstream.
+
+    Examples:
+        When configurations to the pyproject.toml like
+
+            [tool.some_tool.default_config]
+            some_key = "some_value"
+
+        >>> config_finder("pyproject.toml", ["tool", "some_tool", "default_config"])
+        {'some_key': 'some_value'}
 
     Args:
         config_fname: The name of the configuration file as toml or json.
         sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.
         raise_error: if errors will be raised in case any of the files are not found
         additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary.
+
+    Returns:
+        "filtered" Dictionary, where teh sub_config_keys where already applied. I.e. config[sub_config_keys[0]][sub_config_keys[1]]...
     """
 
     # cut the leading dot
