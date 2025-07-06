@@ -90,10 +90,10 @@ def config_finder(
     Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.
 
     Args:
-        config_fname: The name of the configuration file as toml or json. Multiple files can be provided. They will be combined
+        config_fname: The name of the configuration file as toml or json.
         sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.
         raise_error: if errors will be raised in case any of the files are not found
-        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml). Example format is  {"json": json.load}
+        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary.
     """
 
     # cut the leading dot
@@ -128,7 +128,7 @@ def config_finder(
 
 
 def multi_config_finder(
-    config_fname_list: list[str] | list[PurePath],
+    config_fname: list[str] | list[PurePath],
     sub_config_keys: Optional[list[str]] = None,
     raise_error=True,
     additional_readers: Optional[Dict[str, Callable[[Any], Dict[str, Any]]]] = None,
@@ -141,10 +141,10 @@ def multi_config_finder(
     This function first combines all files and afterwards applies the sub_config_keys
 
     Args:
-        config_fname: The name of the configuration file as toml or json. Multiple files can be provided. They will be combined
+        config_fname: List of configuration files. The output will be combined. In case of double definition, input from earlier mentioned files will not be over-written (but additional keys added).
         sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.
         raise_error: if errors will be raised in case any of the files are not found
-        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml). Example format is  {".json": json.load}
+        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary.
     """
 
     configs_all = [
@@ -153,7 +153,7 @@ def multi_config_finder(
             raise_error=raise_error,
             additional_readers=additional_readers,
         )
-        for file in config_fname_list
+        for file in config_fname
     ]
     configuration = configs_all.pop()
 

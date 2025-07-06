@@ -7,6 +7,7 @@ Finds a configuration file (e.g. pyproject.toml) and returns some sub-configurat
 
     * [TOML](https://en.wikipedia.org/wiki/TOML)
     * [JSON](https://en.wikipedia.org/wiki/JSON)
+    * [YAML](https://en.wikipedia.org/wiki/YAML) (see below)
 
 ## Algorighm
 
@@ -44,8 +45,8 @@ This function can also be used to handle credentials.
 !!! caution
     Do not write your credentials into the pyproject.toml and ensure that you do not check your credentials into the source control.
 
-# Other Readers
-Other readers can be added. e.g. [YAML](https://en.wikipedia.org/wiki/YAML) support via [PyYAML](https://pyyaml.org/) can work like this:
+#  Other Readers
+Other readers can be used e.g. for [YAML](https://en.wikipedia.org/wiki/YAML) via [PyYAML](https://pyyaml.org/)/[PyPI: PyYAML](https://pypi.org/project/PyYAML/) works like this:
 
     
     import yaml
