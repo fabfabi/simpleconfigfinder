@@ -30,7 +30,7 @@ Instead of defining global variables, just define these parameters in the pyproj
 
 
 
-Access works via
+To get the key for your `default_config` just call
 
 ```python
 find_configuration("pyproject.toml", ["tool", "some_tool", "default_config"])
@@ -38,6 +38,7 @@ find_configuration("pyproject.toml", ["tool", "some_tool", "default_config"])
 
     {"important_key" : "some_value"}    
 
+and respectively for your `special_config` use
 
 ```python
 find_configuration("pyproject.toml", ["tool", "some_tool", "special_config"])
