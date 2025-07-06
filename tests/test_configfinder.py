@@ -10,6 +10,7 @@ from simpleconfigfinder.configfinder import (
     config_finder,
     config_walker,
     find_file,
+    multi_config_finder,
 )
 
 dictionary_test = {
@@ -105,53 +106,104 @@ def test_config_finder(tmp_path):
         with pytest.raises(NotImplementedError):
             config_finder("somefile.ext", ["a"])
 
-        # ###############################################################################
-        # # test multi_config_finder
-        # assert multi_config_finder([file_toml], ["a", "b1"]) == {
-        #     "c": 11,
-        #     "d": 12,
-        # }
+        ###############################################################################
+        # test multi_config_finder
+        assert multi_config_finder([file_toml], ["a", "b1"]) == {
+            "c": 11,
+            "d": 12,
+        }
 
-        # # test multiple
-        # assert multi_config_finder([file_toml, file_json], ["a", "b2"]) == {
-        #     "c": 10,
-        #     "d": 22,
-        #     "e": 42,
-        # }
-        # # errors for missing files with multiple inputs
-        # assert multi_config_finder(
-        #     [file_toml, "wrongfile.json"], ["a", "b1"], raise_error=False
-        # ) == {
-        #     "c": 11,
-        #     "d": 12,
-        # }
+        # test multiple
+        assert multi_config_finder([file_toml, file_json], ["a", "b2"]) == {
+            "c": 10,
+            "d": 22,
+            "e": 42,
+        }
+        # errors for missing files with multiple inputs
+        assert multi_config_finder(
+            [file_toml, "wrongfile.json"], ["a", "b1"], raise_error=False
+        ) == {
+            "c": 11,
+            "d": 12,
+        }
 
 
 def test_combine_dictionaries():
     d_a = {
+        "a": {"a1": 1, "a2": 2},
+    }
+    d_b = {
+        "a": {"a1": 3, "a3": 3},
+    }
+    t_a = {
+        "a": {"a1": 1, "a2": 2, "a3": 3},
+    }
+    t_b = {
+        "a": {"a1": 3, "a2": 2, "a3": 3},
+    }
+
+    def cd_test(a, b, c):
+        assert combine_dictionaries(deepcopy(a), deepcopy(b)) == c
+
+    cd_test(d_b, d_a, t_b)
+    cd_test(d_a, d_b, t_a)
+
+    d_aa = {
         "a": {
             "a1": 1,
             "a2": 2,
-        },
+            "a": {
+                "a1": 1,
+                "a2": 2,
+            },
+        }
     }
-    d_b = {
+    d_bb = {
         "a": {
             "a1": 3,
             "a3": 3,
+            "a": {
+                "a1": 3,
+                "a3": 3,
+            },
         },
     }
 
-    assert combine_dictionaries(deepcopy(d_b), deepcopy(d_a)) == {
+    t_aa = {
         "a": {
             "a1": 1,
             "a2": 2,
             "a3": 3,
+            "a": {
+                "a1": 1,
+                "a2": 2,
+                "a3": 3,
+            },
         },
     }
-    assert combine_dictionaries(deepcopy(d_a), deepcopy(d_b)) == {
+
+    t_bb = {
         "a": {
             "a1": 3,
             "a2": 2,
             "a3": 3,
+            "a": {
+                "a1": 3,
+                "a2": 2,
+                "a3": 3,
+            },
         },
     }
+    cd_test(d_bb, d_aa, t_bb)
+    cd_test(d_aa, d_bb, t_aa)
+
+    d_ax = {
+        "a": {"a1": 1, "a2": 2},
+    }
+    d_bx = {"a": 2, "b": {"a1": 1, "a2": 2}}
+
+    t_ax = {"a": {"a1": 1, "a2": 2}, "b": {"a1": 1, "a2": 2}}
+    t_bx = {"a": 2, "b": {"a1": 1, "a2": 2}}
+
+    cd_test(d_bx, d_ax, t_bx)
+    cd_test(d_ax, d_bx, t_ax)

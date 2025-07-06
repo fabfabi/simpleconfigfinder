@@ -34,16 +34,31 @@ def find_file(config_fname: str | PurePath) -> PurePath:
 
 
 def combine_dictionaries(dict_a, dict_b):
-    """combine two dictionaries on a granular level
+    """combine two dictionaries on a granular level. The entries of dict_a always have priority over entries of dict_b
 
     !!! important:
         this function modifies the original dicitionaries. If this matters, enter a deepcopy.
     """
+
+    def check_instance(db):
+        return isinstance(db, collections.abc.Mapping)
+
+    # dict a not a dictionary -> dict_a over-writes dict_b
+    if not check_instance(dict_a):
+        return dict_a
+
+    # dict a not a dictionary -> dict_a over-writes dict_b
+    if not check_instance(dict_b):
+        return dict_a
+
+    # both are dictionaries -> recursively combine
     for k, v in dict_a.items():
-        if isinstance(v, collections.abc.Mapping):
-            dict_b[k] = combine_dictionaries(dict_b.get(k, {}), v)
+        if check_instance(v):
+            dict_b[k] = combine_dictionaries(v, dict_b.get(k, {}))
         else:
             dict_b[k] = v
+
+    # add missing keys as they wil not be passed by the loop
     missing_keys = {k: v for k, v in dict_b.items() if k not in dict_a}
     dict_b.update(missing_keys)
 

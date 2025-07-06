@@ -1,4 +1,4 @@
-"""configfinder finds the next configuration file upstream"""
+"""This is a small package with utility functions to find and handle configuration files that are stored upstream from the code."""
 
 from simpleconfigfinder.configfinder import (
     ConfigNotFound,
