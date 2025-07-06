@@ -36,8 +36,40 @@ def find_file(config_fname: str | PurePath) -> PurePath:
 def combine_dictionaries(dict_a, dict_b):
     """combine two dictionaries on a granular level. The entries of dict_a always have priority over entries of dict_b
 
-    !!! important:
-        this function modifies the original dicitionaries. If this matters, enter a deepcopy.
+    !!! caution
+        this function modifies the original dicitionaries. If this matters, use:
+
+            from copy import deepcopy
+            combine_dictionaries(dict_a, deepcopy(dict_b))
+    Args:
+        dict_a: Reference dictionary
+        dict_b: Another dictionary from where the key will be added
+
+    Returns:
+        Combined dictionary of both dict_a and dict_b. Values from dict_a have priority over dict_b. If some values are dictionaries, they will be combined recursively.
+
+    Examples:
+    >>> combine_dictionaries({"a" : 1}, {"b" : 2})
+    {'b': 2, 'a': 1}
+
+    >>> combine_dictionaries({"a" : {"c" : 3}}, {"a" : {"c" : 4}})
+    {'a': {'c': 3}}
+
+    >>> combine_dictionaries({"a" : {"c" : 3}}, {"a" : {"e" : 5}})
+    {'a': {'e': 5, 'c': 3}}
+
+    >>> some_dictionary = {"a" : 1} # to show changes
+    >>> combine_dictionaries({"b" : 2}, some_dictionary)
+    {'a': 1, 'b': 2}
+    >>> some_dictionary # ATTENTION: modified
+    {'a': 1, 'b': 2}
+
+    >>> from copy import deepcopy
+    >>> some_dictionary = {"a" : 1}
+    >>> combine_dictionaries({"b" : 2}, deepcopy(some_dictionary))
+    {'a': 1, 'b': 2}
+    >>> some_dictionary
+    {'a': 1}
     """
 
     def check_instance(db):
@@ -164,3 +196,11 @@ def multi_config_finder(
         return configuration
 
     return config_walker(configuration, sub_config_keys)
+
+
+if __name__ == "__main__":
+    import doctest
+
+    # check if the examples from the docstrings work.
+    # Note, one of them will fail due to the fences ```
+    doctest.testmod()

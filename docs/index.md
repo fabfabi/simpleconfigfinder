@@ -7,7 +7,7 @@ Finds a configuration file (e.g. pyproject.toml) and returns some sub-configurat
 
     * [TOML](https://en.wikipedia.org/wiki/TOML)
     * [JSON](https://en.wikipedia.org/wiki/JSON)
-    * [INI] (https://en.wikipedia.org/wiki/INI_file)
+    * [INI](https://en.wikipedia.org/wiki/INI_file)
     * [YAML](https://en.wikipedia.org/wiki/YAML) (see below)
 
 ## Algorighm
@@ -35,8 +35,9 @@ When defining machine learning projects and handling the project configuration b
 
 Access works via
 
-
-    find_configuration("pyproject.toml", ["tool", "some_tool", "default_config"])
+```python
+find_configuration("pyproject.toml", ["tool", "some_tool", "default_config"])
+```
 
     {"important_key" : "some_value"}    
     
@@ -49,11 +50,11 @@ This function can also be used to handle credentials.
 #  Other Readers
 Other readers can be used e.g. for [YAML](https://en.wikipedia.org/wiki/YAML) via [PyYAML](https://pyyaml.org/)/[PyPI: PyYAML](https://pypi.org/project/PyYAML/) works like this:
 
-    
-    import yaml
-    from simpleconfigfinder import config_finder
+```python
+import yaml
+from simpleconfigfinder import config_finder
 
-    config_finder(
-            "some_file.yaml", additional_readers={"yaml": yaml.safe_load}
-        )
-    
+config_finder(
+        "some_file.yaml", additional_readers={"yaml": yaml.safe_load}
+    )
+```

@@ -30,7 +30,9 @@ some_key = "another_value"
 [tool.pytest.ini_options]
 testpaths = [
     "tests",
+    "src/simpleconfigfinder"
 ]
+addopts = "--doctest-modules  --doctest-continue-on-failure"
 
 [build-system]
 requires = ["uv_build>=0.7.8,<0.8"]
