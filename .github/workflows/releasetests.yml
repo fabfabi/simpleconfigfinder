@@ -35,6 +35,8 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           python-version: ${{ matrix.python-version }}
+      - name: sync test environment
+        run: uv sync --group test
       - name: Run tests
         # For example, using `pytest`
         run: uv run pytest
