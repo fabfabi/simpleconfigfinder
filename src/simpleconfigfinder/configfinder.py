@@ -1,6 +1,8 @@
 import collections.abc
+import configparser
 import json
 import tomllib
+from configparser import ConfigParser
 from pathlib import Path, PurePath
 from typing import Any, Callable, Dict, Optional
 
@@ -16,7 +18,7 @@ class ConfigNotFound(Exception):
 def find_file(config_fname: str | PurePath) -> PurePath:
     """finds the configuration file by checking every parent directory.
 
-    Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.
+    Starts with the directory of the currently executed file (`__main__.__file__`) and searches upstream.
 
     Args:
         config_fname: the name of the configuration file"""
@@ -33,8 +35,32 @@ def find_file(config_fname: str | PurePath) -> PurePath:
     raise FileNotFoundError(f"'{config_fname}' was not found")
 
 
-def combine_dictionaries(dict_a, dict_b):
-    """combine two dictionaries on a granular level. The entries of dict_a always have priority over entries of dict_b
+def configparser_to_dict(configuration: configparser.ConfigParser) -> Dict[str, str]:
+    """converts a configparser element (handling ini files) to a dictionary
+
+    Example:
+
+        >>> from configparser import ConfigParser
+        >>> cfg = ConfigParser()
+        >>> cfg.read_dict({ "a": {"a1": "1", "a2": "2"}})
+        >>> configparser_to_dict(cfg)
+        {'DEFAULT': {}, 'a': {'a1': '1', 'a2': '2'}}
+
+    Args:
+        configuration: configuration object loaded by the configparser
+
+    Returns:
+        dictionary of entries"""
+    return {
+        key: value
+        if type(value) is not configparser.SectionProxy
+        else {k: v for k, v in value.items()}
+        for key, value in configuration.items()
+    }
+
+
+def combine_dictionaries(dict_a: Any, dict_b: Any) -> Any:
+    """combine two dictionaries on a granular level. The entries of `dict_a` always have priority over entries of `dict_b`.
 
     !!! caution
         this function modifies the original dicitionaries. If this matters, use:
@@ -106,7 +132,7 @@ def combine_dictionaries(dict_a, dict_b):
 def config_walker(
     configuration_dictionary: Dict[str, Any], sub_config_keys: list[str]
 ) -> Dict[str, Any]:
-    """goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys
+    """goes upstream from the currently executed file and finds the file `config_fname` and returns the `sub_config_keys`
 
     Args:
         configuration_dictionary: containing the configuration as dictionary of dictionaries
@@ -132,9 +158,9 @@ def config_finder(
     raise_error=True,
     additional_readers: Optional[Dict[str, Callable[[Any], Dict[str, Any]]]] = None,
 ) -> Dict[str, Any]:
-    """goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys
+    """goes upstream from the currently executed file and finds the file `config_fname` and returns the `sub_config_keys`
 
-    Starts with the directory of the currently executed file (\_\_main\_\_.\_\_file\_\_) and searches upstream.
+    Starts with the directory of the currently executed file (`__main__.__file__`) and searches upstream.
 
     Examples:
 
@@ -159,9 +185,15 @@ def config_finder(
     """
 
     # cut the leading dot
-    extension = Path(config_fname).suffix[1:]
+    extension = Path(config_fname).suffix[1:].lower()
 
-    reader_dictionary = {"toml": tomllib.load, "json": json.load}
+    def ini_reader(file) -> Dict:
+        """small unitility function to read ini files"""
+        cfg = ConfigParser()
+        cfg.read(file)
+        return configparser_to_dict(cfg)
+
+    reader_dictionary = {"toml": tomllib.load, "json": json.load, "ini": ini_reader}
     if additional_readers:
         reader_dictionary.update(additional_readers)
 
@@ -195,9 +227,9 @@ def multi_config_finder(
     raise_error=True,
     additional_readers: Optional[Dict[str, Callable[[Any], Dict[str, Any]]]] = None,
 ) -> Dict[str, Any]:
-    """goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys
+    """goes upstream from the currently executed file and finds the file `config_fname` and returns the `sub_config_keys`
 
-    Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.
+    Starts with the directory of the currently executed file (`__main__.__file__`) and searches upstream.
 
     In case there are multiple configuration files provided and keys are in multiple of them, the first occurence will be returned.
     This function first combines all files and afterwards applies the sub_config_keys

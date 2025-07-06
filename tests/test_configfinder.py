@@ -1,3 +1,4 @@
+import configparser
 import json
 from copy import deepcopy
 
@@ -10,6 +11,7 @@ from simpleconfigfinder.configfinder import (
     combine_dictionaries,
     config_finder,
     config_walker,
+    configparser_to_dict,
     find_file,
     multi_config_finder,
 )
@@ -84,7 +86,7 @@ def test_config_finder(tmp_path):
     dt = deepcopy(dictionary_test)
     dt["a"]["b1"]
 
-    file_json = "test.json"
+    file_json = "test.JSON"
     mock_file(file_json, json.dumps(dictionary_test))
 
     file_json_like = "test.jsonlike"
@@ -93,9 +95,17 @@ def test_config_finder(tmp_path):
     file_yaml = "test.yaml"
     mock_file(file_yaml, yaml.dump(dictionary_test))
 
+    file_ini = "test.ini"
+    file = tmp_path / file_ini
+    cfg = configparser.ConfigParser()
+    cfg.read_dict(dictionary_test)
+    with open(file, "wb") as writer:
+        cfg.write(writer)
+
     with pytest.MonkeyPatch.context() as context:
         context.setattr(__main__, "__file__", file_python)
-
+        ########################################################################
+        # basic formats
         # test TOML
         assert config_finder(file_toml, ["a", "b1"]) == {
             "c": 11,
@@ -108,6 +118,15 @@ def test_config_finder(tmp_path):
             "d": 2,
         }
 
+        # test INI
+        cfg_ini = config_finder(file_json, ["a", "b1"])
+        del cfg_ini["DEFAULT"]
+        assert cfg_ini == {
+            "c": 1,
+            "d": 2,
+        }
+        ########################################################################
+        # test keyword-arugments
         # errors for missing files
         assert config_finder("somefile.json", [], raise_error=False) == {}
 
@@ -150,6 +169,19 @@ def test_config_finder(tmp_path):
             "c": 11,
             "d": 12,
         }
+
+
+def test_configparser_to_dict():
+    d = {
+        "a": {"a1": "1", "a2": "2"},
+    }
+    cfg = configparser.ConfigParser()
+    cfg.read_dict(d)
+
+    d_parsed = configparser_to_dict(cfg)
+    del d_parsed["DEFAULT"]
+
+    assert d == d_parsed
 
 
 def test_combine_dictionaries():
