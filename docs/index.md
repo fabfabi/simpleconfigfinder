@@ -10,7 +10,7 @@ Finds a configuration file (e.g. pyproject.toml) and returns some sub-configurat
     * [INI](https://en.wikipedia.org/wiki/INI_file)
     * [YAML](https://en.wikipedia.org/wiki/YAML) (see below)
 
-## Algorighm
+# Algorighm
 
 1. starts from the currently executed file (\_\_main\_\_.\_\_file\_\_)
 2. Checks if that folder contains the desired configuration file
