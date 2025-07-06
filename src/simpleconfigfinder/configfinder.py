@@ -1,10 +1,11 @@
 import collections.abc
 import configparser
 import json
-import tomllib
 from configparser import ConfigParser
 from pathlib import Path, PurePath
 from typing import Any, Callable, Dict, Optional
+
+import tomllib
 
 import __main__
 
@@ -41,7 +42,6 @@ def configparser_to_dict(configuration: configparser.ConfigParser) -> Dict[str, 
     Example:
 
         >>> from configparser import ConfigParser
-        >>> assert False
         >>> cfg = ConfigParser()
         >>> cfg.read_dict({ "a": {"a1": "1", "a2": "2"}})
         >>> configparser_to_dict(cfg)
