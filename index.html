@@ -45,8 +45,6 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#algorighm">Algorighm</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#use-case">Use Case</a>
-    </li>
     </ul>
                 </li>
               </ul>
@@ -94,7 +92,7 @@
 <li>Checks if that folder contains the desired configuration file</li>
 <li>Goes to the parent directory and repeats at 2</li>
 </ol>
-<h2 id="use-case">Use Case</h2>
+<h1 id="use-case">Use Case</h1>
 <p>When defining machine learning projects and handling the project configuration by e.g. a <a href="https://packaging.python.org/en/latest/guides/writing-pyproject-toml/">pyproject.toml</a> (e.g. with <a href="https://docs.astral.sh/uv/">Astral UV</a> or  <a href="https://python-poetry.org/">Poetry</a>) you can utilize the configuration files to define and store important variables.</p>
 <pre><code>[tool.some_tool]
 key1 = "some_value_1"
@@ -111,18 +109,24 @@ important_key = "another_value"
 <p>Instead of defining global variables in your code or using <a href="https://pypi.org/project/python-dotenv/">dotenv</a>, a configuration file such as the pyproject.toml can be used to store configurations.</p>
 </div>
 <p>Access works via</p>
-<pre><code>```python 
-find_configuration("pyproject.toml", ["tool", "some_tool", "default_config"])
-```
-```
-{"important_key" : "some_value"}    
-```
+<pre><code>find_configuration("pyproject.toml", ["tool", "some_tool", "default_config"])
+
+{"important_key" : "some_value"}
 </code></pre>
 <p>This function can also be used to handle credentials.</p>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>Do not write your credentials into the pyproject.toml and ensure that you do not check your credentials into the source control.</p>
 </div>
+<h1 id="other-readers">Other Readers</h1>
+<p>Other readers can be added. e.g. <a href="https://en.wikipedia.org/wiki/YAML">YAML</a> support via <a href="https://pyyaml.org/">PyYAML</a> can work like this:</p>
+<pre><code>import yaml
+from simpleconfigfinder import config_finder
+
+config_finder(
+        "some_file.yaml", additional_readers={"yaml": yaml.safe_load}
+    )
+</code></pre>
               
             </div>
           </div><footer>
@@ -174,5 +178,5 @@ find_configuration("pyproject.toml", ["tool", "some_tool", "default_config"])
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-07-05 11:38:39.703815+00:00
+Build Date UTC : 2025-07-06 08:22:52.535038+00:00
 -->

@@ -53,11 +53,15 @@
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#simpleconfigfinder.configfinder.ConfigNotFound">ConfigNotFound</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#simpleconfigfinder.configfinder.combine_dictionaries">combine_dictionaries</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#simpleconfigfinder.configfinder.config_finder">config_finder</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#simpleconfigfinder.configfinder.config_walker">config_walker</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#simpleconfigfinder.configfinder.find_file">find_file</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#simpleconfigfinder.configfinder.multi_config_finder">multi_config_finder</a>
     </li>
         </ul>
     </li>
@@ -98,7 +102,7 @@
 <a id="simpleconfigfinder"></a>
     <div class="doc doc-contents first">
 
-        <p>configfinder finds the next configuration file upstream</p>
+        <p>This is a small package with utility functions to find and handle configuration files that are stored upstream from the code.</p>
 
 
 
@@ -174,10 +178,10 @@
 
               <details class="quote">
                 <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
-<span class="normal">10</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">10</span>
 <span class="normal">11</span>
-<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ConfigNotFound</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ConfigNotFound</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;will be raised when the given keys for the sub-configuration do not exist in the configuration file&quot;&quot;&quot;</span>
 
     <span class="k">pass</span>
@@ -192,8 +196,91 @@
 <div class="doc doc-object doc-function">
 
 
+<h3 id="simpleconfigfinder.configfinder.combine_dictionaries" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">combine_dictionaries</span><span class="p">(</span><span class="n">dict_a</span><span class="p">,</span> <span class="n">dict_b</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>combine two dictionaries on a granular level. The entries of dict_a always have priority over entries of dict_b</p>
+<p>!!! important:
+    this function modifies the original dicitionaries. If this matters, enter a deepcopy.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">combine_dictionaries</span><span class="p">(</span><span class="n">dict_a</span><span class="p">,</span> <span class="n">dict_b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;combine two dictionaries on a granular level. The entries of dict_a always have priority over entries of dict_b</span>
+
+<span class="sd">    !!! important:</span>
+<span class="sd">        this function modifies the original dicitionaries. If this matters, enter a deepcopy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_instance</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Mapping</span><span class="p">)</span>
+
+    <span class="c1"># dict a not a dictionary -&gt; dict_a over-writes dict_b</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">check_instance</span><span class="p">(</span><span class="n">dict_a</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">dict_a</span>
+
+    <span class="c1"># dict a not a dictionary -&gt; dict_a over-writes dict_b</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">check_instance</span><span class="p">(</span><span class="n">dict_b</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">dict_a</span>
+
+    <span class="c1"># both are dictionaries -&gt; recursively combine</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dict_a</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">check_instance</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+            <span class="n">dict_b</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">combine_dictionaries</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dict_b</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">{}))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dict_b</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+    <span class="c1"># add missing keys as they wil not be passed by the loop</span>
+    <span class="n">missing_keys</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dict_b</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dict_a</span><span class="p">}</span>
+    <span class="n">dict_b</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">missing_keys</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dict_b</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
 <h3 id="simpleconfigfinder.configfinder.config_finder" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">config_finder</span><span class="p">(</span><span class="n">config_fname</span><span class="p">,</span> <span class="n">sub_config_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">config_finder</span><span class="p">(</span><span class="n">config_fname</span><span class="p">,</span> <span class="n">sub_config_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">additional_readers</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h3>
 
@@ -201,8 +288,6 @@
     <div class="doc doc-contents ">
 
         <p>goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys</p>
-<p>In case there are multiple configuration files provided and keys are in multiple of them, the last occurence will be returned.
-The function is first executed and afterwards the results are combined</p>
 <p>Starts with the directory of the currently executed file (<strong>main</strong>.<strong>file</strong>) and searches upstream.</p>
 
 
@@ -218,7 +303,7 @@ The function is first executed and afterwards the results are combined</p>
         <ul class="first simple">
             <li>
               <b><code>config_fname</code></b>
-                  (<code><span title="str">str</span> | <span title="pathlib.PurePath">PurePath</span> | <span title="typing.Iterable">Iterable</span>[<span title="str">str</span>] | <span title="typing.Iterable">Iterable</span>[<span title="pathlib.PurePath">PurePath</span>]</code>)
+                  (<code><span title="str">str</span> | <span title="pathlib.PurePath">PurePath</span></code>)
               –
               <div class="doc-md-description">
                 <p>The name of the configuration file as toml or json. Multiple files can be provided. They will be combined</p>
@@ -241,6 +326,16 @@ The function is first executed and afterwards the results are combined</p>
                 <p>if errors will be raised in case any of the files are not found</p>
               </div>
             </li>
+            <li>
+              <b><code>additional_readers</code></b>
+                  (<code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="typing.Callable">Callable</span>[[<span title="typing.Any">Any</span>], <span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>]]]]</code>, default:
+                      <code>None</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>dictionary to define for file extensions which readers will be used (e.g. for yaml). Example format is  {"json": json.load}</p>
+              </div>
+            </li>
         </ul>
       </td>
     </tr>
@@ -249,40 +344,7 @@ The function is first executed and afterwards the results are combined</p>
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 49</span>
-<span class="normal"> 50</span>
-<span class="normal"> 51</span>
-<span class="normal"> 52</span>
-<span class="normal"> 53</span>
-<span class="normal"> 54</span>
-<span class="normal"> 55</span>
-<span class="normal"> 56</span>
-<span class="normal"> 57</span>
-<span class="normal"> 58</span>
-<span class="normal"> 59</span>
-<span class="normal"> 60</span>
-<span class="normal"> 61</span>
-<span class="normal"> 62</span>
-<span class="normal"> 63</span>
-<span class="normal"> 64</span>
-<span class="normal"> 65</span>
-<span class="normal"> 66</span>
-<span class="normal"> 67</span>
-<span class="normal"> 68</span>
-<span class="normal"> 69</span>
-<span class="normal"> 70</span>
-<span class="normal"> 71</span>
-<span class="normal"> 72</span>
-<span class="normal"> 73</span>
-<span class="normal"> 74</span>
-<span class="normal"> 75</span>
-<span class="normal"> 76</span>
-<span class="normal"> 77</span>
-<span class="normal"> 78</span>
-<span class="normal"> 79</span>
-<span class="normal"> 80</span>
-<span class="normal"> 81</span>
-<span class="normal"> 82</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 82</span>
 <span class="normal"> 83</span>
 <span class="normal"> 84</span>
 <span class="normal"> 85</span>
@@ -303,43 +365,58 @@ The function is first executed and afterwards the results are combined</p>
 <span class="normal">100</span>
 <span class="normal">101</span>
 <span class="normal">102</span>
-<span class="normal">103</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_finder</span><span class="p">(</span>
-    <span class="n">config_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PurePath</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">PurePath</span><span class="p">],</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_finder</span><span class="p">(</span>
+    <span class="n">config_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PurePath</span><span class="p">,</span>
     <span class="n">sub_config_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">additional_readers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys</span>
-
-<span class="sd">    In case there are multiple configuration files provided and keys are in multiple of them, the last occurence will be returned.</span>
-<span class="sd">    The function is first executed and afterwards the results are combined</span>
 
 <span class="sd">    Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        config_fname: The name of the configuration file as toml or json. Multiple files can be provided. They will be combined</span>
 <span class="sd">        sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.</span>
-<span class="sd">        raise_error: if errors will be raised in case any of the files are not found&quot;&quot;&quot;</span>
+<span class="sd">        raise_error: if errors will be raised in case any of the files are not found</span>
+<span class="sd">        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml). Example format is  {&quot;json&quot;: json.load}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># iteratively call the function for all individual entries</span>
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">config_fname</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
-        <span class="n">configuration</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="p">[</span>
-            <span class="n">configuration</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-                <span class="n">config_finder</span><span class="p">(</span>
-                    <span class="n">name</span><span class="p">,</span> <span class="n">sub_config_keys</span><span class="o">=</span><span class="n">sub_config_keys</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="n">raise_error</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">config_fname</span>
-        <span class="p">]</span>
-        <span class="k">return</span> <span class="n">configuration</span>
+    <span class="c1"># cut the leading dot</span>
+    <span class="n">extension</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config_fname</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 
-    <span class="c1"># this path will only happen for single entries</span>
-    <span class="n">extension</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config_fname</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span>  <span class="c1"># type: ignore since list values are handled above</span>
-
-    <span class="n">reader_dictionary</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;.toml&quot;</span><span class="p">:</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">,</span> <span class="s2">&quot;.json&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">}</span>
+    <span class="n">reader_dictionary</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;toml&quot;</span><span class="p">:</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">,</span> <span class="s2">&quot;json&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">additional_readers</span><span class="p">:</span>
+        <span class="n">reader_dictionary</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">additional_readers</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">extension</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reader_dictionary</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;config finder not implmeneted for &#39;</span><span class="si">{</span><span class="n">extension</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;config finder not implmeneted for &#39;</span><span class="si">{</span><span class="n">extension</span><span class="si">}</span><span class="s2">&#39;. Use any of &#39;</span><span class="si">{</span><span class="n">reader_dictionary</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+        <span class="p">)</span>
 
     <span class="n">reader</span> <span class="o">=</span> <span class="n">reader_dictionary</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span>
 
@@ -380,18 +457,18 @@ The function is first executed and afterwards the results are combined</p>
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span>
-<span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_walker</span><span class="p">(</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_walker</span><span class="p">(</span>
     <span class="n">configuration_dictionary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">sub_config_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys&quot;&quot;&quot;</span>
@@ -450,8 +527,7 @@ The function is first executed and afterwards the results are combined</p>
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
-<span class="normal">16</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">16</span>
 <span class="normal">17</span>
 <span class="normal">18</span>
 <span class="normal">19</span>
@@ -467,7 +543,8 @@ The function is first executed and afterwards the results are combined</p>
 <span class="normal">29</span>
 <span class="normal">30</span>
 <span class="normal">31</span>
-<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PurePath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PurePath</span><span class="p">:</span>
+<span class="normal">32</span>
+<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PurePath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PurePath</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;finds the configuration file by checking every parent directory.</span>
 
 <span class="sd">    Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.</span>
@@ -485,6 +562,154 @@ The function is first executed and afterwards the results are combined</p>
         <span class="n">directory</span> <span class="o">=</span> <span class="n">directory</span><span class="o">.</span><span class="n">parent</span>
 
     <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">config_fname</span><span class="si">}</span><span class="s2">&#39; was not found&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="simpleconfigfinder.configfinder.multi_config_finder" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">multi_config_finder</span><span class="p">(</span><span class="n">config_fname_list</span><span class="p">,</span> <span class="n">sub_config_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">additional_readers</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys</p>
+<p>Starts with the directory of the currently executed file (<strong>main</strong>.<strong>file</strong>) and searches upstream.</p>
+<p>In case there are multiple configuration files provided and keys are in multiple of them, the first occurence will be returned.
+This function first combines all files and afterwards applies the sub_config_keys</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>config_fname</code></b>
+              –
+              <div class="doc-md-description">
+                <p>The name of the configuration file as toml or json. Multiple files can be provided. They will be combined</p>
+              </div>
+            </li>
+            <li>
+              <b><code>sub_config_keys</code></b>
+                  (<code><span title="typing.Optional">Optional</span>[<span title="list">list</span>[<span title="str">str</span>]]</code>, default:
+                      <code>None</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>raise_error</code></b>
+              –
+              <div class="doc-md-description">
+                <p>if errors will be raised in case any of the files are not found</p>
+              </div>
+            </li>
+            <li>
+              <b><code>additional_readers</code></b>
+                  (<code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="typing.Callable">Callable</span>[[<span title="typing.Any">Any</span>], <span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>]]]]</code>, default:
+                      <code>None</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>dictionary to define for file extensions which readers will be used (e.g. for yaml). Example format is  {".json": json.load}</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+            <details class="quote">
+              <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multi_config_finder</span><span class="p">(</span>
+    <span class="n">config_fname_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">PurePath</span><span class="p">],</span>
+    <span class="n">sub_config_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">additional_readers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys</span>
+
+<span class="sd">    Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.</span>
+
+<span class="sd">    In case there are multiple configuration files provided and keys are in multiple of them, the first occurence will be returned.</span>
+<span class="sd">    This function first combines all files and afterwards applies the sub_config_keys</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config_fname: The name of the configuration file as toml or json. Multiple files can be provided. They will be combined</span>
+<span class="sd">        sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.</span>
+<span class="sd">        raise_error: if errors will be raised in case any of the files are not found</span>
+<span class="sd">        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml). Example format is  {&quot;.json&quot;: json.load}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">configs_all</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">config_finder</span><span class="p">(</span>
+            <span class="n">config_fname</span><span class="o">=</span><span class="n">file</span><span class="p">,</span>
+            <span class="n">raise_error</span><span class="o">=</span><span class="n">raise_error</span><span class="p">,</span>
+            <span class="n">additional_readers</span><span class="o">=</span><span class="n">additional_readers</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">config_fname_list</span>
+    <span class="p">]</span>
+    <span class="n">configuration</span> <span class="o">=</span> <span class="n">configs_all</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">cfg</span> <span class="ow">in</span> <span class="n">configs_all</span><span class="p">:</span>
+        <span class="n">configuration</span> <span class="o">=</span> <span class="n">combine_dictionaries</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span> <span class="n">cfg</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">sub_config_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">configuration</span>
+
+    <span class="k">return</span> <span class="n">config_walker</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span> <span class="n">sub_config_keys</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
