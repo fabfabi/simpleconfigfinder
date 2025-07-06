@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Code - Config Finder</title>
+    <title>API Reference - Config Finder</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,7 +13,7 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Code";
+        var mkdocs_page_name = "API Reference";
         var mkdocs_page_input_path = "configfinder.md";
         var mkdocs_page_url = null;
       </script>
@@ -36,16 +36,20 @@
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
           <a href=".." class="icon icon-home"> Config Finder
-        </a>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="..">Start</a>
+                <li class="toctree-l1"><a class="reference internal" href="..">Overview</a>
                 </li>
               </ul>
               <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="#">Code</a>
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">API Reference</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#simpleconfigfinder">simpleconfigfinder</a>
     </li>
@@ -58,6 +62,8 @@
     <li class="toctree-l3"><a class="reference internal" href="#simpleconfigfinder.configfinder.config_finder">config_finder</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#simpleconfigfinder.configfinder.config_walker">config_walker</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#simpleconfigfinder.configfinder.configparser_to_dict">configparser_to_dict</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#simpleconfigfinder.configfinder.find_file">find_file</a>
     </li>
@@ -82,9 +88,9 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Code</li>
+      <li class="breadcrumb-item active">API Reference</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/fabfabi/configfinder/edit/master/docs/configfinder.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/fabfabi/simpleconfigfinder/edit/master/docs/configfinder.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -92,7 +98,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="code">Code</h1>
+                <h1 id="simpleconfigfinder_1">simpleconfigfinder</h1>
 
 
 <div class="doc doc-object doc-module">
@@ -128,7 +134,7 @@
 
 
 <h2 id="simpleconfigfinder.configfinder" class="doc doc-heading">
-            <code>configfinder</code>
+            <span class="doc doc-object-name doc-module-name">configfinder</span>
 
 
 </h2>
@@ -157,7 +163,7 @@
 
 
 <h3 id="simpleconfigfinder.configfinder.ConfigNotFound" class="doc doc-heading">
-            <code>ConfigNotFound</code>
+            <span class="doc doc-object-name doc-class-name">ConfigNotFound</span>
 
 
 </h3>
@@ -178,10 +184,10 @@
 
               <details class="quote">
                 <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ConfigNotFound</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ConfigNotFound</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;will be raised when the given keys for the sub-configuration do not exist in the configuration file&quot;&quot;&quot;</span>
 
     <span class="k">pass</span>
@@ -197,98 +203,23 @@
 
 
 <h3 id="simpleconfigfinder.configfinder.combine_dictionaries" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">combine_dictionaries</span><span class="p">(</span><span class="n">dict_a</span><span class="p">,</span> <span class="n">dict_b</span><span class="p">)</span></code>
+            <span class="doc doc-object-name doc-function-name">combine_dictionaries</span>
+
 
 </h3>
-
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">combine_dictionaries</span><span class="p">(</span><span class="n">dict_a</span><span class="p">,</span> <span class="n">dict_b</span><span class="p">)</span>
+</code></pre></div>
 
     <div class="doc doc-contents ">
 
-        <p>combine two dictionaries on a granular level. The entries of dict_a always have priority over entries of dict_b</p>
-<p>!!! important:
-    this function modifies the original dicitionaries. If this matters, enter a deepcopy.</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span>
-<span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span>
-<span class="normal">48</span>
-<span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span>
-<span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">combine_dictionaries</span><span class="p">(</span><span class="n">dict_a</span><span class="p">,</span> <span class="n">dict_b</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;combine two dictionaries on a granular level. The entries of dict_a always have priority over entries of dict_b</span>
-
-<span class="sd">    !!! important:</span>
-<span class="sd">        this function modifies the original dicitionaries. If this matters, enter a deepcopy.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">check_instance</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Mapping</span><span class="p">)</span>
-
-    <span class="c1"># dict a not a dictionary -&gt; dict_a over-writes dict_b</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">check_instance</span><span class="p">(</span><span class="n">dict_a</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">dict_a</span>
-
-    <span class="c1"># dict a not a dictionary -&gt; dict_a over-writes dict_b</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">check_instance</span><span class="p">(</span><span class="n">dict_b</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">dict_a</span>
-
-    <span class="c1"># both are dictionaries -&gt; recursively combine</span>
-    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dict_a</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">check_instance</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
-            <span class="n">dict_b</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">combine_dictionaries</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dict_b</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">{}))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">dict_b</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
-
-    <span class="c1"># add missing keys as they wil not be passed by the loop</span>
-    <span class="n">missing_keys</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dict_b</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dict_a</span><span class="p">}</span>
-    <span class="n">dict_b</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">missing_keys</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">dict_b</span>
-</code></pre></div></td></tr></table></div>
-            </details>
-    </div>
-
+        <p>combine two dictionaries on a granular level. The entries of <code>dict_a</code> always have priority over entries of <code>dict_b</code>.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>this function modifies the original dicitionaries. If this matters, use:</p>
+<div class="highlight"><pre><span></span><code>from copy import deepcopy
+combine_dictionaries(dict_a, deepcopy(dict_b))
+</code></pre></div>
 </div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="simpleconfigfinder.configfinder.config_finder" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">config_finder</span><span class="p">(</span><span class="n">config_fname</span><span class="p">,</span> <span class="n">sub_config_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">additional_readers</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys</p>
-<p>Starts with the directory of the currently executed file (<strong>main</strong>.<strong>file</strong>) and searches upstream.</p>
 
 
 <table class="field-list">
@@ -302,38 +233,19 @@
       <td class="field-body">
         <ul class="first simple">
             <li>
-              <b><code>config_fname</code></b>
-                  (<code><span title="str">str</span> | <span title="pathlib.PurePath">PurePath</span></code>)
+              <b><code>dict_a</code></b>
+                  (<code><span title="typing.Any">Any</span></code>)
               –
               <div class="doc-md-description">
-                <p>The name of the configuration file as toml or json.</p>
+                <p>Reference dictionary</p>
               </div>
             </li>
             <li>
-              <b><code>sub_config_keys</code></b>
-                  (<code><span title="typing.Optional">Optional</span>[<span title="list">list</span>[<span title="str">str</span>]]</code>, default:
-                      <code>None</code>
-)
+              <b><code>dict_b</code></b>
+                  (<code><span title="typing.Any">Any</span></code>)
               –
               <div class="doc-md-description">
-                <p>A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.</p>
-              </div>
-            </li>
-            <li>
-              <b><code>raise_error</code></b>
-              –
-              <div class="doc-md-description">
-                <p>if errors will be raised in case any of the files are not found</p>
-              </div>
-            </li>
-            <li>
-              <b><code>additional_readers</code></b>
-                  (<code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="typing.Callable">Callable</span>[[<span title="typing.Any">Any</span>], <span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>]]]]</code>, default:
-                      <code>None</code>
-)
-              –
-              <div class="doc-md-description">
-                <p>dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary.</p>
+                <p>Another dictionary from where the key will be added</p>
               </div>
             </li>
         </ul>
@@ -342,9 +254,78 @@
   </tbody>
 </table>
 
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+                  <code><span title="typing.Any">Any</span></code>
+              –
+              <div class="doc-md-description">
+                <p>Combined dictionary of both dict_a and dict_b.   Values from dict_a have priority over dict_b.        If some values are dictionaries, they will be combined recursively.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>        <!--note that the blank line behind Example needs to be there. There are two options.
+Either the examples are rendered properly (with integrated drop-down)
+Or the Doctests are rendered properly-->
+
+<p>Examples:</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; combine_dictionaries({&quot;a&quot; : 1}, {&quot;b&quot; : 2})
+{&#39;b&#39;: 2, &#39;a&#39;: 1}
+
+&gt;&gt;&gt; combine_dictionaries({&quot;a&quot; : {&quot;c&quot; : 3}}, {&quot;a&quot; : {&quot;c&quot; : 4}})
+{&#39;a&#39;: {&#39;c&#39;: 3}}
+
+&gt;&gt;&gt; combine_dictionaries({&quot;a&quot; : {&quot;c&quot; : 3}}, {&quot;a&quot; : {&quot;e&quot; : 5}})
+{&#39;a&#39;: {&#39;e&#39;: 5, &#39;c&#39;: 3}}
+
+&gt;&gt;&gt; some_dictionary = {&quot;a&quot; : 1} # to show changes
+&gt;&gt;&gt; combine_dictionaries({&quot;b&quot; : 2}, some_dictionary)
+{&#39;a&#39;: 1, &#39;b&#39;: 2}
+&gt;&gt;&gt; some_dictionary # ATTENTION: modified
+{&#39;a&#39;: 1, &#39;b&#39;: 2}
+
+&gt;&gt;&gt; from copy import deepcopy
+&gt;&gt;&gt; some_dictionary = {&quot;a&quot; : 1}
+&gt;&gt;&gt; combine_dictionaries({&quot;b&quot; : 2}, deepcopy(some_dictionary))
+{&#39;a&#39;: 1, &#39;b&#39;: 2}
+&gt;&gt;&gt; some_dictionary
+{&#39;a&#39;: 1}
+</code></pre></div>
+
+
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 82</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
 <span class="normal"> 83</span>
 <span class="normal"> 84</span>
 <span class="normal"> 85</span>
@@ -389,27 +370,298 @@
 <span class="normal">124</span>
 <span class="normal">125</span>
 <span class="normal">126</span>
-<span class="normal">127</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_finder</span><span class="p">(</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">combine_dictionaries</span><span class="p">(</span><span class="n">dict_a</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">dict_b</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;combine two dictionaries on a granular level. The entries of `dict_a` always have priority over entries of `dict_b`.</span>
+
+<span class="sd">    !!! caution</span>
+<span class="sd">        this function modifies the original dicitionaries. If this matters, use:</span>
+
+<span class="sd">            from copy import deepcopy</span>
+<span class="sd">            combine_dictionaries(dict_a, deepcopy(dict_b))</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dict_a: Reference dictionary</span>
+<span class="sd">        dict_b: Another dictionary from where the key will be added</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Combined dictionary of both dict_a and dict_b.   Values from dict_a have priority over dict_b.        If some values are dictionaries, they will be combined recursively.</span>
+
+<span class="sd">    &lt;!--note that the blank line behind Example needs to be there. There are two options.</span>
+<span class="sd">    Either the examples are rendered properly (with integrated drop-down)</span>
+<span class="sd">    Or the Doctests are rendered properly--&gt;</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">        &gt;&gt;&gt; combine_dictionaries({&quot;a&quot; : 1}, {&quot;b&quot; : 2})</span>
+<span class="sd">        {&#39;b&#39;: 2, &#39;a&#39;: 1}</span>
+
+<span class="sd">        &gt;&gt;&gt; combine_dictionaries({&quot;a&quot; : {&quot;c&quot; : 3}}, {&quot;a&quot; : {&quot;c&quot; : 4}})</span>
+<span class="sd">        {&#39;a&#39;: {&#39;c&#39;: 3}}</span>
+
+<span class="sd">        &gt;&gt;&gt; combine_dictionaries({&quot;a&quot; : {&quot;c&quot; : 3}}, {&quot;a&quot; : {&quot;e&quot; : 5}})</span>
+<span class="sd">        {&#39;a&#39;: {&#39;e&#39;: 5, &#39;c&#39;: 3}}</span>
+
+<span class="sd">        &gt;&gt;&gt; some_dictionary = {&quot;a&quot; : 1} # to show changes</span>
+<span class="sd">        &gt;&gt;&gt; combine_dictionaries({&quot;b&quot; : 2}, some_dictionary)</span>
+<span class="sd">        {&#39;a&#39;: 1, &#39;b&#39;: 2}</span>
+<span class="sd">        &gt;&gt;&gt; some_dictionary # ATTENTION: modified</span>
+<span class="sd">        {&#39;a&#39;: 1, &#39;b&#39;: 2}</span>
+
+<span class="sd">        &gt;&gt;&gt; from copy import deepcopy</span>
+<span class="sd">        &gt;&gt;&gt; some_dictionary = {&quot;a&quot; : 1}</span>
+<span class="sd">        &gt;&gt;&gt; combine_dictionaries({&quot;b&quot; : 2}, deepcopy(some_dictionary))</span>
+<span class="sd">        {&#39;a&#39;: 1, &#39;b&#39;: 2}</span>
+<span class="sd">        &gt;&gt;&gt; some_dictionary</span>
+<span class="sd">        {&#39;a&#39;: 1}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_instance</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Mapping</span><span class="p">)</span>
+
+    <span class="c1"># dict a not a dictionary -&gt; dict_a over-writes dict_b</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">check_instance</span><span class="p">(</span><span class="n">dict_a</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">dict_a</span>
+
+    <span class="c1"># dict a not a dictionary -&gt; dict_a over-writes dict_b</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">check_instance</span><span class="p">(</span><span class="n">dict_b</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">dict_a</span>
+
+    <span class="c1"># both are dictionaries -&gt; recursively combine</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dict_a</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">check_instance</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+            <span class="n">dict_b</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">combine_dictionaries</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dict_b</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">{}))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dict_b</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+    <span class="c1"># add missing keys as they wil not be passed by the loop</span>
+    <span class="n">missing_keys</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dict_b</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dict_a</span><span class="p">}</span>
+    <span class="n">dict_b</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">missing_keys</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dict_b</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="simpleconfigfinder.configfinder.config_finder" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">config_finder</span>
+
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">config_finder</span><span class="p">(</span>
+    <span class="n">config_fname</span><span class="p">,</span>
+    <span class="n">sub_config_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">additional_readers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>goes upstream from the currently executed file and finds the file <code>config_fname</code> and returns the <code>sub_config_keys</code></p>
+<p>Starts with the directory of the currently executed file (<code>__main__.__file__</code>) and searches upstream.</p>
+<p>Examples:</p>
+<p>When configurations to the pyproject.toml like</p>
+<div class="highlight"><pre><span></span><code>[tool.some_tool.default_config]
+some_key = &quot;some_value&quot;
+</code></pre></div>
+<p>Then you can get these values via</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; config_finder(&quot;pyproject.toml&quot;, [&quot;tool&quot;, &quot;some_tool&quot;, &quot;default_config&quot;])
+{&#39;some_key&#39;: &#39;some_value&#39;}
+</code></pre></div>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>config_fname</code></b>
+                  (<code><span title="str">str</span> | <span title="pathlib.PurePath">PurePath</span></code>)
+              –
+              <div class="doc-md-description">
+                <p>The name of the configuration file as toml or json.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>sub_config_keys</code></b>
+                  (<code><span title="typing.Optional">Optional</span>[<span title="list">list</span>[<span title="str">str</span>]]</code>, default:
+                      <code>None</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>raise_error</code></b>
+              –
+              <div class="doc-md-description">
+                <p>if errors will be raised in case any of the files are not found</p>
+              </div>
+            </li>
+            <li>
+              <b><code>additional_readers</code></b>
+                  (<code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="typing.Callable">Callable</span>[[<span title="typing.Any">Any</span>], <span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>]]]]</code>, default:
+                      <code>None</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary. For a code example see <a href="../#other-readers">Other Readers</a></p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+                  <code><span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>]</code>
+              –
+              <div class="doc-md-description">
+                <p>"filtered" Dictionary, where teh sub_config_keys where already applied. I.e. config[sub_config_keys[0]][sub_config_keys[1]]...</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+            <details class="quote">
+              <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_finder</span><span class="p">(</span>
     <span class="n">config_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PurePath</span><span class="p">,</span>
     <span class="n">sub_config_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">additional_readers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;goes upstream from the currently executed file and finds the file `config_fname` and returns the `sub_config_keys`</span>
 
-<span class="sd">    Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.</span>
+<span class="sd">    Starts with the directory of the currently executed file (`__main__.__file__`) and searches upstream.</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">    When configurations to the pyproject.toml like</span>
+
+<span class="sd">        [tool.some_tool.default_config]</span>
+<span class="sd">        some_key = &quot;some_value&quot;</span>
+
+<span class="sd">    Then you can get these values via</span>
+
+<span class="sd">        &gt;&gt;&gt; config_finder(&quot;pyproject.toml&quot;, [&quot;tool&quot;, &quot;some_tool&quot;, &quot;default_config&quot;])</span>
+<span class="sd">        {&#39;some_key&#39;: &#39;some_value&#39;}</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        config_fname: The name of the configuration file as toml or json.</span>
 <span class="sd">        sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.</span>
 <span class="sd">        raise_error: if errors will be raised in case any of the files are not found</span>
-<span class="sd">        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {&quot;yaml&quot;: yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary.</span>
+<span class="sd">        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {&quot;yaml&quot;: yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary. For a code example see [Other Readers](index.md#other-readers)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        &quot;filtered&quot; Dictionary, where teh sub_config_keys where already applied. I.e. config[sub_config_keys[0]][sub_config_keys[1]]...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># cut the leading dot</span>
-    <span class="n">extension</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config_fname</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">extension</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config_fname</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
-    <span class="n">reader_dictionary</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;toml&quot;</span><span class="p">:</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">,</span> <span class="s2">&quot;json&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">}</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ini_reader</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;small unitility function to read ini files&quot;&quot;&quot;</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="n">cfg</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">configparser_to_dict</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+
+    <span class="n">reader_dictionary</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;toml&quot;</span><span class="p">:</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">,</span> <span class="s2">&quot;json&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">,</span> <span class="s2">&quot;ini&quot;</span><span class="p">:</span> <span class="n">ini_reader</span><span class="p">}</span>
     <span class="k">if</span> <span class="n">additional_readers</span><span class="p">:</span>
         <span class="n">reader_dictionary</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">additional_readers</span><span class="p">)</span>
 
@@ -445,33 +697,89 @@
 
 
 <h3 id="simpleconfigfinder.configfinder.config_walker" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">config_walker</span><span class="p">(</span><span class="n">configuration_dictionary</span><span class="p">,</span> <span class="n">sub_config_keys</span><span class="p">)</span></code>
+            <span class="doc doc-object-name doc-function-name">config_walker</span>
+
 
 </h3>
-
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">config_walker</span><span class="p">(</span><span class="n">configuration_dictionary</span><span class="p">,</span> <span class="n">sub_config_keys</span><span class="p">)</span>
+</code></pre></div>
 
     <div class="doc doc-contents ">
 
-        <p>goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys</p>
+        <p>goes upstream from the currently executed file and finds the file <code>config_fname</code> and returns the <code>sub_config_keys</code></p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>configuration_dictionary</code></b>
+                  (<code><span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>]</code>)
+              –
+              <div class="doc-md-description">
+                <p>containing the configuration as dictionary of dictionaries</p>
+              </div>
+            </li>
+            <li>
+              <b><code>sub_config_keys</code></b>
+                  (<code><span title="list">list</span>[<span title="str">str</span>]</code>)
+              –
+              <div class="doc-md-description">
+                <p>defines the keys of the branches that are supposed to be returned</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>        <p>Example:</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; config_walker({&quot;a&quot;: {&quot;b&quot; : {&quot;b1&quot; : 1, &quot;b2&quot; : 2}}}, [&quot;a&quot;, &quot;b&quot;])
+{&#39;b1&#39;: 1, &#39;b2&#39;: 2}
+</code></pre></div>
 
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span>
-<span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span>
-<span class="normal">79</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_walker</span><span class="p">(</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_walker</span><span class="p">(</span>
     <span class="n">configuration_dictionary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">sub_config_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;goes upstream from the currently executed file and finds the file `config_fname` and returns the `sub_config_keys`</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        configuration_dictionary: containing the configuration as dictionary of dictionaries</span>
+<span class="sd">        sub_config_keys: defines the keys of the branches that are supposed to be returned</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">        &gt;&gt;&gt; config_walker({&quot;a&quot;: {&quot;b&quot; : {&quot;b1&quot; : 1, &quot;b2&quot; : 2}}}, [&quot;a&quot;, &quot;b&quot;])</span>
+<span class="sd">        {&#39;b1&#39;: 1, &#39;b2&#39;: 2}&quot;&quot;&quot;</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sub_config_keys</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">configuration_dictionary</span><span class="p">:</span>
@@ -489,16 +797,139 @@
 <div class="doc doc-object doc-function">
 
 
-<h3 id="simpleconfigfinder.configfinder.find_file" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">)</span></code>
+<h3 id="simpleconfigfinder.configfinder.configparser_to_dict" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">configparser_to_dict</span>
+
 
 </h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">configparser_to_dict</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
+</code></pre></div>
 
+    <div class="doc doc-contents ">
+
+        <p>converts a configparser element (handling ini files) to a dictionary</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; from configparser import ConfigParser
+&gt;&gt;&gt; cfg = ConfigParser()
+&gt;&gt;&gt; cfg.read_dict({ &quot;a&quot;: {&quot;a1&quot;: &quot;1&quot;, &quot;a2&quot;: &quot;2&quot;}})
+&gt;&gt;&gt; configparser_to_dict(cfg)
+{&#39;DEFAULT&#39;: {}, &#39;a&#39;: {&#39;a1&#39;: &#39;1&#39;, &#39;a2&#39;: &#39;2&#39;}}
+</code></pre></div>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>configuration</code></b>
+                  (<code><span title="configparser.ConfigParser">ConfigParser</span></code>)
+              –
+              <div class="doc-md-description">
+                <p>configuration object loaded by the configparser</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+                  <code><span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="str">str</span>]</code>
+              –
+              <div class="doc-md-description">
+                <p>dictionary of entries</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+            <details class="quote">
+              <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">configparser_to_dict</span><span class="p">(</span><span class="n">configuration</span><span class="p">:</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;converts a configparser element (handling ini files) to a dictionary</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">        &gt;&gt;&gt; from configparser import ConfigParser</span>
+<span class="sd">        &gt;&gt;&gt; cfg = ConfigParser()</span>
+<span class="sd">        &gt;&gt;&gt; cfg.read_dict({ &quot;a&quot;: {&quot;a1&quot;: &quot;1&quot;, &quot;a2&quot;: &quot;2&quot;}})</span>
+<span class="sd">        &gt;&gt;&gt; configparser_to_dict(cfg)</span>
+<span class="sd">        {&#39;DEFAULT&#39;: {}, &#39;a&#39;: {&#39;a1&#39;: &#39;1&#39;, &#39;a2&#39;: &#39;2&#39;}}</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        configuration: configuration object loaded by the configparser</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dictionary of entries&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="n">key</span><span class="p">:</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">configparser</span><span class="o">.</span><span class="n">SectionProxy</span>
+        <span class="k">else</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">configuration</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="simpleconfigfinder.configfinder.find_file" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">find_file</span>
+
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">)</span>
+</code></pre></div>
 
     <div class="doc doc-contents ">
 
         <p>finds the configuration file by checking every parent directory.</p>
-<p>Starts with the directory of the currently executed file (<strong>main</strong>.<strong>file</strong>) and searches upstream.</p>
+<p>Starts with the directory of the currently executed file (<code>__main__.__file__</code>) and searches upstream.</p>
 
 
 <table class="field-list">
@@ -527,10 +958,7 @@
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">19</span>
 <span class="normal">20</span>
 <span class="normal">21</span>
 <span class="normal">22</span>
@@ -544,10 +972,13 @@
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span>
-<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PurePath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PurePath</span><span class="p">:</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PurePath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PurePath</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;finds the configuration file by checking every parent directory.</span>
 
-<span class="sd">    Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.</span>
+<span class="sd">    Starts with the directory of the currently executed file (`__main__.__file__`) and searches upstream.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        config_fname: the name of the configuration file&quot;&quot;&quot;</span>
@@ -572,15 +1003,22 @@
 
 
 <h3 id="simpleconfigfinder.configfinder.multi_config_finder" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">multi_config_finder</span><span class="p">(</span><span class="n">config_fname</span><span class="p">,</span> <span class="n">sub_config_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">additional_readers</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+            <span class="doc doc-object-name doc-function-name">multi_config_finder</span>
+
 
 </h3>
-
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">multi_config_finder</span><span class="p">(</span>
+    <span class="n">config_fname</span><span class="p">,</span>
+    <span class="n">sub_config_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">additional_readers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
 
     <div class="doc doc-contents ">
 
-        <p>goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys</p>
-<p>Starts with the directory of the currently executed file (<strong>main</strong>.<strong>file</strong>) and searches upstream.</p>
+        <p>goes upstream from the currently executed file and finds the file <code>config_fname</code> and returns the <code>sub_config_keys</code></p>
+<p>Starts with the directory of the currently executed file (<code>__main__.__file__</code>) and searches upstream.</p>
 <p>In case there are multiple configuration files provided and keys are in multiple of them, the first occurence will be returned.
 This function first combines all files and afterwards applies the sub_config_keys</p>
 
@@ -627,7 +1065,7 @@ This function first combines all files and afterwards applies the sub_config_key
 )
               –
               <div class="doc-md-description">
-                <p>dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary.</p>
+                <p>dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary. For a code example see <a href="../#other-readers">Other Readers</a></p>
               </div>
             </li>
         </ul>
@@ -638,51 +1076,51 @@ This function first combines all files and afterwards applies the sub_config_key
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span>
-<span class="normal">138</span>
-<span class="normal">139</span>
-<span class="normal">140</span>
-<span class="normal">141</span>
-<span class="normal">142</span>
-<span class="normal">143</span>
-<span class="normal">144</span>
-<span class="normal">145</span>
-<span class="normal">146</span>
-<span class="normal">147</span>
-<span class="normal">148</span>
-<span class="normal">149</span>
-<span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span>
-<span class="normal">153</span>
-<span class="normal">154</span>
-<span class="normal">155</span>
-<span class="normal">156</span>
-<span class="normal">157</span>
-<span class="normal">158</span>
-<span class="normal">159</span>
-<span class="normal">160</span>
-<span class="normal">161</span>
-<span class="normal">162</span>
-<span class="normal">163</span>
-<span class="normal">164</span>
-<span class="normal">165</span>
-<span class="normal">166</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multi_config_finder</span><span class="p">(</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multi_config_finder</span><span class="p">(</span>
     <span class="n">config_fname</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">PurePath</span><span class="p">],</span>
     <span class="n">sub_config_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">additional_readers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;goes upstream from the currently executed file and finds the file `config_fname` and returns the `sub_config_keys`</span>
 
-<span class="sd">    Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.</span>
+<span class="sd">    Starts with the directory of the currently executed file (`__main__.__file__`) and searches upstream.</span>
 
 <span class="sd">    In case there are multiple configuration files provided and keys are in multiple of them, the first occurence will be returned.</span>
 <span class="sd">    This function first combines all files and afterwards applies the sub_config_keys</span>
@@ -691,7 +1129,7 @@ This function first combines all files and afterwards applies the sub_config_key
 <span class="sd">        config_fname: List of configuration files. The output will be combined. In case of double definition, input from earlier mentioned files will not be over-written (but additional keys added).</span>
 <span class="sd">        sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.</span>
 <span class="sd">        raise_error: if errors will be raised in case any of the files are not found</span>
-<span class="sd">        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {&quot;yaml&quot;: yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary.</span>
+<span class="sd">        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {&quot;yaml&quot;: yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary. For a code example see [Other Readers](index.md#other-readers)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">configs_all</span> <span class="o">=</span> <span class="p">[</span>
@@ -735,7 +1173,7 @@ This function first combines all files and afterwards applies the sub_config_key
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href=".." class="btn btn-neutral float-left" title="Start"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href=".." class="btn btn-neutral float-left" title="Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
     </div>
 
   <hr/>
@@ -758,7 +1196,7 @@ This function first combines all files and afterwards applies the sub_config_key
   <span class="rst-current-version" data-toggle="rst-current-version">
     
         <span>
-          <a href="https://github.com/fabfabi/configfinder" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/fabfabi/simpleconfigfinder" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
         </span>
     
     
@@ -771,6 +1209,7 @@ This function first combines all files and afterwards applies the sub_config_key
     <script>var base_url = "..";</script>
     <script src="../js/theme_extra.js"></script>
     <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
     <script>
         jQuery(function () {
             SphinxRtdTheme.Navigation.enable(true);

@@ -13,7 +13,7 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Start";
+        var mkdocs_page_name = "Overview";
         var mkdocs_page_input_path = "index.md";
         var mkdocs_page_url = null;
       </script>
@@ -36,12 +36,16 @@
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
           <a href="." class="icon icon-home"> Config Finder
-        </a>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="#">Start</a>
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Overview</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#algorighm">Algorighm</a>
     </li>
@@ -49,7 +53,7 @@
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="configfinder/">Code</a>
+                <li class="toctree-l1"><a class="reference internal" href="configfinder/">API Reference</a>
                 </li>
               </ul>
       </div>
@@ -66,9 +70,9 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Start</li>
+      <li class="breadcrumb-item active">Overview</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/fabfabi/configfinder/edit/master/docs/index.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/fabfabi/simpleconfigfinder/edit/master/docs/index.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -84,6 +88,7 @@
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/TOML">TOML</a></li>
 <li><a href="https://en.wikipedia.org/wiki/JSON">JSON</a></li>
+<li><a href="https://en.wikipedia.org/wiki/INI_file">INI</a></li>
 <li><a href="https://en.wikipedia.org/wiki/YAML">YAML</a> (see below)</li>
 </ul>
 </div>
@@ -95,25 +100,25 @@
 </ol>
 <h1 id="use-case">Use Case</h1>
 <p>When defining machine learning projects and handling the project configuration by e.g. a <a href="https://packaging.python.org/en/latest/guides/writing-pyproject-toml/">pyproject.toml</a> (e.g. with <a href="https://docs.astral.sh/uv/">Astral UV</a> or  <a href="https://python-poetry.org/">Poetry</a>) you can utilize the configuration files to define and store important variables.</p>
-<pre><code>[tool.some_tool]
-key1 = "some_value_1"
-key2 = "some_value_2"
+<div class="highlight"><pre><span></span><code>[tool.some_tool]
+key1 = &quot;some_value_1&quot;
+key2 = &quot;some_value_2&quot;
 
 [tool.some_tool.default_config]
-important_key = "some_value"
+important_key = &quot;some_value&quot;
 
 [tool.some_tool.special_config]
-important_key = "another_value"
-</code></pre>
+important_key = &quot;another_value&quot;
+</code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Instead of defining global variables in your code or using <a href="https://pypi.org/project/python-dotenv/">dotenv</a>, a configuration file such as the pyproject.toml can be used to store configurations.</p>
 </div>
 <p>Access works via</p>
-<pre><code>find_configuration("pyproject.toml", ["tool", "some_tool", "default_config"])
-
-{"important_key" : "some_value"}
+<pre><code class="language-python">find_configuration(&quot;pyproject.toml&quot;, [&quot;tool&quot;, &quot;some_tool&quot;, &quot;default_config&quot;])
 </code></pre>
+<div class="highlight"><pre><span></span><code>{&quot;important_key&quot; : &quot;some_value&quot;}
+</code></pre></div>
 <p>This function can also be used to handle credentials.</p>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
@@ -121,18 +126,18 @@ important_key = "another_value"
 </div>
 <h1 id="other-readers">Other Readers</h1>
 <p>Other readers can be used e.g. for <a href="https://en.wikipedia.org/wiki/YAML">YAML</a> via <a href="https://pyyaml.org/">PyYAML</a>/<a href="https://pypi.org/project/PyYAML/">PyPI: PyYAML</a> works like this:</p>
-<pre><code>import yaml
+<pre><code class="language-python">import yaml
 from simpleconfigfinder import config_finder
 
 config_finder(
-        "some_file.yaml", additional_readers={"yaml": yaml.safe_load}
+        &quot;some_file.yaml&quot;, additional_readers={&quot;yaml&quot;: yaml.safe_load}
     )
 </code></pre>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="configfinder/" class="btn btn-neutral float-right" title="Code">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="configfinder/" class="btn btn-neutral float-right" title="API Reference">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -155,7 +160,7 @@ config_finder(
   <span class="rst-current-version" data-toggle="rst-current-version">
     
         <span>
-          <a href="https://github.com/fabfabi/configfinder" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/fabfabi/simpleconfigfinder" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
         </span>
     
     
@@ -168,6 +173,7 @@ config_finder(
     <script>var base_url = ".";</script>
     <script src="js/theme_extra.js"></script>
     <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
     <script>
         jQuery(function () {
             SphinxRtdTheme.Navigation.enable(true);
@@ -179,5 +185,5 @@ config_finder(
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-07-06 08:38:54.842239+00:00
+Build Date UTC : 2025-07-06 16:43:09.324147+00:00
 -->
