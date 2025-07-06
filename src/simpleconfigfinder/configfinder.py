@@ -136,12 +136,14 @@ def config_finder(
 
     Starts with the directory of the currently executed file (\_\_main\_\_.\_\_file\_\_) and searches upstream.
 
-    Example:
+    Examples:
 
-        When configurations to the pyproject.toml like
+    When configurations to the pyproject.toml like
 
-            [tool.some_tool.default_config]
-            some_key = "some_value"
+        [tool.some_tool.default_config]
+        some_key = "some_value"
+
+    Then you can get these values via
 
         >>> config_finder("pyproject.toml", ["tool", "some_tool", "default_config"])
         {'some_key': 'some_value'}
@@ -150,7 +152,7 @@ def config_finder(
         config_fname: The name of the configuration file as toml or json.
         sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.
         raise_error: if errors will be raised in case any of the files are not found
-        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary.
+        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary. For a code example see [Other Readers](index.md#other-readers)
 
     Returns:
         "filtered" Dictionary, where teh sub_config_keys where already applied. I.e. config[sub_config_keys[0]][sub_config_keys[1]]...
@@ -204,7 +206,7 @@ def multi_config_finder(
         config_fname: List of configuration files. The output will be combined. In case of double definition, input from earlier mentioned files will not be over-written (but additional keys added).
         sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.
         raise_error: if errors will be raised in case any of the files are not found
-        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary.
+        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary. For a code example see [Other Readers](index.md#other-readers)
     """
 
     configs_all = [
