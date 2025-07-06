@@ -1,8 +1,10 @@
 name: check formatting and run tests
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main
+  pull_request:
 
 permissions:
   contents: read
