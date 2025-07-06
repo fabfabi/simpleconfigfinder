@@ -41,6 +41,7 @@ def configparser_to_dict(configuration: configparser.ConfigParser) -> Dict[str, 
     Example:
 
         >>> from configparser import ConfigParser
+        >>> assert False
         >>> cfg = ConfigParser()
         >>> cfg.read_dict({ "a": {"a1": "1", "a2": "2"}})
         >>> configparser_to_dict(cfg)

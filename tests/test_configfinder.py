@@ -64,7 +64,7 @@ def test_config_walker():
         config_walker(dictionary_test, ["a", "b3"])
 
 
-def test_config_finder(tmp_path):
+def test_config_finder(tmp_path, tmpdir):
     test_input_toml = [
         "[a.b1]",
         "c = 11",
@@ -96,10 +96,10 @@ def test_config_finder(tmp_path):
     mock_file(file_yaml, yaml.dump(dictionary_test))
 
     file_ini = "test.ini"
-    file = tmp_path / file_ini
+    file = tmpdir.join(file_ini)
     cfg = configparser.ConfigParser()
     cfg.read_dict(dictionary_test)
-    with open(file, "wb") as writer:
+    with open(file, "w") as writer:
         cfg.write(writer)
 
     with pytest.MonkeyPatch.context() as context:
@@ -120,7 +120,6 @@ def test_config_finder(tmp_path):
 
         # test INI
         cfg_ini = config_finder(file_json, ["a", "b1"])
-        del cfg_ini["DEFAULT"]
         assert cfg_ini == {
             "c": 1,
             "d": 2,
