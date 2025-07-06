@@ -5,6 +5,7 @@ from simpleconfigfinder.configfinder import (
     combine_dictionaries,
     config_finder,
     config_walker,
+    configparser_to_dict,
     find_file,
     multi_config_finder,
 )
