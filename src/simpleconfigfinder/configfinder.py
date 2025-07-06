@@ -41,14 +41,20 @@ def combine_dictionaries(dict_a, dict_b):
 
             from copy import deepcopy
             combine_dictionaries(dict_a, deepcopy(dict_b))
+
     Args:
         dict_a: Reference dictionary
         dict_b: Another dictionary from where the key will be added
 
     Returns:
-        Combined dictionary of both dict_a and dict_b. Values from dict_a have priority over dict_b. If some values are dictionaries, they will be combined recursively.
+        Combined dictionary of both dict_a and dict_b.   Values from dict_a have priority over dict_b.        If some values are dictionaries, they will be combined recursively.
+
+    <!--note that the blank line behind Example needs to be there. There are two options.
+    Either the examples are rendered properly (with integrated drop-down)
+    Or the Doctests are rendered properly-->
 
     Examples:
+
         >>> combine_dictionaries({"a" : 1}, {"b" : 2})
         {'b': 2, 'a': 1}
 
@@ -100,7 +106,16 @@ def combine_dictionaries(dict_a, dict_b):
 def config_walker(
     configuration_dictionary: Dict[str, Any], sub_config_keys: list[str]
 ) -> Dict[str, Any]:
-    """goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys"""
+    """goes upstream from the currently executed file and finds the file config_fname and returns the sub_config_keys
+
+    Args:
+        configuration_dictionary: containing the configuration as dictionary of dictionaries
+        sub_config_keys: defines the keys of the branches that are supposed to be returned
+
+    Example:
+
+        >>> config_walker({"a": {"b" : {"b1" : 1, "b2" : 2}}}, ["a", "b"])
+        {'b1': 1, 'b2': 2}"""
 
     for i, key in enumerate(sub_config_keys):
         if key in configuration_dictionary:
@@ -121,7 +136,8 @@ def config_finder(
 
     Starts with the directory of the currently executed file (\_\_main\_\_.\_\_file\_\_) and searches upstream.
 
-    Examples:
+    Example:
+
         When configurations to the pyproject.toml like
 
             [tool.some_tool.default_config]
@@ -208,11 +224,3 @@ def multi_config_finder(
         return configuration
 
     return config_walker(configuration, sub_config_keys)
-
-
-if __name__ == "__main__":
-    import doctest
-
-    # check if the examples from the docstrings work.
-    # Note, one of them will fail due to the fences ```
-    doctest.testmod()

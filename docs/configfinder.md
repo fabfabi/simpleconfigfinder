@@ -1,3 +1,3 @@
-# Code
+# simpleconfigfinder
 
 ::: simpleconfigfinder

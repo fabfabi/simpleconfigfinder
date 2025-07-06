@@ -33,5 +33,5 @@ plugins:
 - search
 
 nav:
-  - Start: 'index.md'
-  - Code: 'configfinder.md'
+  - Overview: 'index.md'
+  - API Reference: 'configfinder.md'
