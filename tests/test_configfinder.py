@@ -167,7 +167,7 @@ def test_combine_dictionaries():
     }
 
     def cd_test(a, b, c):
-        assert combine_dictionaries(deepcopy(a), deepcopy(b)) == c
+        assert combine_dictionaries(a, deepcopy(b)) == c
 
     cd_test(d_b, d_a, t_b)
     cd_test(d_a, d_b, t_a)
