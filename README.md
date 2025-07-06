@@ -46,4 +46,4 @@ find_configuration("pyproject.toml", ["tool", "some_tool", "special_config"])
 
     {"important_key" : "another_value"}    
 
-[Link to Documentation](https://fabfabi.github.io/simpleconfigfinder/)
+[Link to full documentation](https://fabfabi.github.io/simpleconfigfinder/)
