@@ -306,7 +306,7 @@
                   (<code><span title="str">str</span> | <span title="pathlib.PurePath">PurePath</span></code>)
               –
               <div class="doc-md-description">
-                <p>The name of the configuration file as toml or json. Multiple files can be provided. They will be combined</p>
+                <p>The name of the configuration file as toml or json.</p>
               </div>
             </li>
             <li>
@@ -333,7 +333,7 @@
 )
               –
               <div class="doc-md-description">
-                <p>dictionary to define for file extensions which readers will be used (e.g. for yaml). Example format is  {"json": json.load}</p>
+                <p>dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary.</p>
               </div>
             </li>
         </ul>
@@ -400,10 +400,10 @@
 <span class="sd">    Starts with the directory of the currently executed file (__main__.__file__) and searches upstream.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        config_fname: The name of the configuration file as toml or json. Multiple files can be provided. They will be combined</span>
+<span class="sd">        config_fname: The name of the configuration file as toml or json.</span>
 <span class="sd">        sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.</span>
 <span class="sd">        raise_error: if errors will be raised in case any of the files are not found</span>
-<span class="sd">        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml). Example format is  {&quot;json&quot;: json.load}</span>
+<span class="sd">        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {&quot;yaml&quot;: yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># cut the leading dot</span>
@@ -572,7 +572,7 @@
 
 
 <h3 id="simpleconfigfinder.configfinder.multi_config_finder" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">multi_config_finder</span><span class="p">(</span><span class="n">config_fname_list</span><span class="p">,</span> <span class="n">sub_config_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">additional_readers</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">multi_config_finder</span><span class="p">(</span><span class="n">config_fname</span><span class="p">,</span> <span class="n">sub_config_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">additional_readers</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h3>
 
@@ -597,9 +597,10 @@ This function first combines all files and afterwards applies the sub_config_key
         <ul class="first simple">
             <li>
               <b><code>config_fname</code></b>
+                  (<code><span title="list">list</span>[<span title="str">str</span>] | <span title="list">list</span>[<span title="pathlib.PurePath">PurePath</span>]</code>)
               –
               <div class="doc-md-description">
-                <p>The name of the configuration file as toml or json. Multiple files can be provided. They will be combined</p>
+                <p>List of configuration files. The output will be combined. In case of double definition, input from earlier mentioned files will not be over-written (but additional keys added).</p>
               </div>
             </li>
             <li>
@@ -626,7 +627,7 @@ This function first combines all files and afterwards applies the sub_config_key
 )
               –
               <div class="doc-md-description">
-                <p>dictionary to define for file extensions which readers will be used (e.g. for yaml). Example format is  {".json": json.load}</p>
+                <p>dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary.</p>
               </div>
             </li>
         </ul>
@@ -674,7 +675,7 @@ This function first combines all files and afterwards applies the sub_config_key
 <span class="normal">164</span>
 <span class="normal">165</span>
 <span class="normal">166</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multi_config_finder</span><span class="p">(</span>
-    <span class="n">config_fname_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">PurePath</span><span class="p">],</span>
+    <span class="n">config_fname</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">PurePath</span><span class="p">],</span>
     <span class="n">sub_config_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">additional_readers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -687,10 +688,10 @@ This function first combines all files and afterwards applies the sub_config_key
 <span class="sd">    This function first combines all files and afterwards applies the sub_config_keys</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        config_fname: The name of the configuration file as toml or json. Multiple files can be provided. They will be combined</span>
+<span class="sd">        config_fname: List of configuration files. The output will be combined. In case of double definition, input from earlier mentioned files will not be over-written (but additional keys added).</span>
 <span class="sd">        sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.</span>
 <span class="sd">        raise_error: if errors will be raised in case any of the files are not found</span>
-<span class="sd">        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml). Example format is  {&quot;.json&quot;: json.load}</span>
+<span class="sd">        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {&quot;yaml&quot;: yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">configs_all</span> <span class="o">=</span> <span class="p">[</span>
@@ -699,7 +700,7 @@ This function first combines all files and afterwards applies the sub_config_key
             <span class="n">raise_error</span><span class="o">=</span><span class="n">raise_error</span><span class="p">,</span>
             <span class="n">additional_readers</span><span class="o">=</span><span class="n">additional_readers</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">config_fname_list</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">config_fname</span>
     <span class="p">]</span>
     <span class="n">configuration</span> <span class="o">=</span> <span class="n">configs_all</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
 
