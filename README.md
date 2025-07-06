@@ -6,6 +6,7 @@ Supported formats:
 
 * [TOML](https://en.wikipedia.org/wiki/TOML)
 * [JSON](https://en.wikipedia.org/wiki/JSON)
+* [INI] (https://en.wikipedia.org/wiki/INI_file)
 * [YAML](https://en.wikipedia.org/wiki/YAML) (see [Documentation](https://fabfabi.github.io/simpleconfigfinder/) how to enable)
 
 
