@@ -306,12 +306,7 @@ Or the Doctests are rendered properly-->
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 63</span>
-<span class="normal"> 64</span>
-<span class="normal"> 65</span>
-<span class="normal"> 66</span>
-<span class="normal"> 67</span>
-<span class="normal"> 68</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 68</span>
 <span class="normal"> 69</span>
 <span class="normal"> 70</span>
 <span class="normal"> 71</span>
@@ -373,7 +368,12 @@ Or the Doctests are rendered properly-->
 <span class="normal">127</span>
 <span class="normal">128</span>
 <span class="normal">129</span>
-<span class="normal">130</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">combine_dictionaries</span><span class="p">(</span><span class="n">dict_a</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">dict_b</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">combine_dictionaries</span><span class="p">(</span><span class="n">dict_a</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">dict_b</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;combine two dictionaries on a granular level. The entries of `dict_a` always have priority over entries of `dict_b`.</span>
 
 <span class="sd">    !!! caution</span>
@@ -466,7 +466,8 @@ Or the Doctests are rendered properly-->
     <div class="doc doc-contents ">
 
         <p>goes upstream from the currently executed file and finds the file <code>config_fname</code> and returns the <code>sub_config_keys</code></p>
-<p>Starts with the directory of the currently executed file (<code>__main__.__file__</code>) and searches upstream.</p>
+<p>Starts with the directory of the currently executed file (<code>__main__.__file__</code>) and searches upstream.
+For Jupyter Notebooks, <code>os.path.abspath("")</code> will be returned instead.</p>
 <p>Examples:</p>
 <p>When configurations to the pyproject.toml like</p>
 <div class="highlight"><pre><span></span><code>[tool.some_tool.default_config]
@@ -554,12 +555,7 @@ some_key = &quot;some_value&quot;
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">156</span>
-<span class="normal">157</span>
-<span class="normal">158</span>
-<span class="normal">159</span>
-<span class="normal">160</span>
-<span class="normal">161</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">161</span>
 <span class="normal">162</span>
 <span class="normal">163</span>
 <span class="normal">164</span>
@@ -620,7 +616,13 @@ some_key = &quot;some_value&quot;
 <span class="normal">219</span>
 <span class="normal">220</span>
 <span class="normal">221</span>
-<span class="normal">222</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_finder</span><span class="p">(</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_finder</span><span class="p">(</span>
     <span class="n">config_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PurePath</span><span class="p">,</span>
     <span class="n">sub_config_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -629,6 +631,7 @@ some_key = &quot;some_value&quot;
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;goes upstream from the currently executed file and finds the file `config_fname` and returns the `sub_config_keys`</span>
 
 <span class="sd">    Starts with the directory of the currently executed file (`__main__.__file__`) and searches upstream.</span>
+<span class="sd">    For Jupyter Notebooks, `os.path.abspath(&quot;&quot;)` will be returned instead.</span>
 
 <span class="sd">    Examples:</span>
 
@@ -747,12 +750,7 @@ some_key = &quot;some_value&quot;
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span>
-<span class="normal">138</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">138</span>
 <span class="normal">139</span>
 <span class="normal">140</span>
 <span class="normal">141</span>
@@ -767,7 +765,12 @@ some_key = &quot;some_value&quot;
 <span class="normal">150</span>
 <span class="normal">151</span>
 <span class="normal">152</span>
-<span class="normal">153</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_walker</span><span class="p">(</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_walker</span><span class="p">(</span>
     <span class="n">configuration_dictionary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">sub_config_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;goes upstream from the currently executed file and finds the file `config_fname` and returns the `sub_config_keys`</span>
@@ -866,12 +869,7 @@ some_key = &quot;some_value&quot;
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span>
-<span class="normal">43</span>
-<span class="normal">44</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">44</span>
 <span class="normal">45</span>
 <span class="normal">46</span>
 <span class="normal">47</span>
@@ -887,7 +885,12 @@ some_key = &quot;some_value&quot;
 <span class="normal">57</span>
 <span class="normal">58</span>
 <span class="normal">59</span>
-<span class="normal">60</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">configparser_to_dict</span><span class="p">(</span><span class="n">configuration</span><span class="p">:</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">configparser_to_dict</span><span class="p">(</span><span class="n">configuration</span><span class="p">:</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;converts a configparser element (handling ini files) to a dictionary</span>
 
 <span class="sd">    Example:</span>
@@ -929,7 +932,8 @@ some_key = &quot;some_value&quot;
     <div class="doc doc-contents ">
 
         <p>finds the configuration file by checking every parent directory.</p>
-<p>Starts with the directory of the currently executed file (<code>__main__.__file__</code>) and searches upstream.</p>
+<p>Starts with the directory of the currently executed file (<code>__main__.__file__</code>) and searches upstream.
+For Jupyter Notebooks, <code>os.path.abspath("")</code> will be returned instead.</p>
 
 
 <table class="field-list">
@@ -975,15 +979,25 @@ some_key = &quot;some_value&quot;
 <span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
-<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PurePath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PurePath</span><span class="p">:</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PurePath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PurePath</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;finds the configuration file by checking every parent directory.</span>
 
 <span class="sd">    Starts with the directory of the currently executed file (`__main__.__file__`) and searches upstream.</span>
+<span class="sd">    For Jupyter Notebooks, `os.path.abspath(&quot;&quot;)` will be returned instead.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        config_fname: the name of the configuration file&quot;&quot;&quot;</span>
 
-    <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">__main__</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">__main__</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="c1"># above version does not work for *.ipynb</span>
+        <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">))</span>
 
     <span class="k">while</span> <span class="n">directory</span><span class="o">.</span><span class="n">parent</span> <span class="o">!=</span> <span class="n">directory</span><span class="p">:</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">directory</span> <span class="o">/</span> <span class="n">config_fname</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
@@ -1076,13 +1090,7 @@ This function first combines all files and afterwards applies the sub_config_key
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">225</span>
-<span class="normal">226</span>
-<span class="normal">227</span>
-<span class="normal">228</span>
-<span class="normal">229</span>
-<span class="normal">230</span>
-<span class="normal">231</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">231</span>
 <span class="normal">232</span>
 <span class="normal">233</span>
 <span class="normal">234</span>
@@ -1112,7 +1120,13 @@ This function first combines all files and afterwards applies the sub_config_key
 <span class="normal">258</span>
 <span class="normal">259</span>
 <span class="normal">260</span>
-<span class="normal">261</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multi_config_finder</span><span class="p">(</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multi_config_finder</span><span class="p">(</span>
     <span class="n">config_fname</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">PurePath</span><span class="p">],</span>
     <span class="n">sub_config_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
