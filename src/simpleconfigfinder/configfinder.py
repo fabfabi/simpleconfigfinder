@@ -1,11 +1,11 @@
 import collections.abc
 import configparser
 import json
+import os
+import tomllib
 from configparser import ConfigParser
 from pathlib import Path, PurePath
 from typing import Any, Callable, Dict, Optional
-
-import tomllib
 
 import __main__
 
@@ -20,11 +20,16 @@ def find_file(config_fname: str | PurePath) -> PurePath:
     """finds the configuration file by checking every parent directory.
 
     Starts with the directory of the currently executed file (`__main__.__file__`) and searches upstream.
+    For Jupyter Notebooks, `os.path.abspath("")` will be returned instead.
 
     Args:
         config_fname: the name of the configuration file"""
 
-    directory = Path(__main__.__file__).parent
+    try:
+        directory = Path(__main__.__file__).parent
+    except AttributeError:
+        # above version does not work for *.ipynb
+        directory = Path(os.path.abspath(""))
 
     while directory.parent != directory:
         if (directory / config_fname).exists():
@@ -162,6 +167,7 @@ def config_finder(
     """goes upstream from the currently executed file and finds the file `config_fname` and returns the `sub_config_keys`
 
     Starts with the directory of the currently executed file (`__main__.__file__`) and searches upstream.
+    For Jupyter Notebooks, `os.path.abspath("")` will be returned instead.
 
     Examples:
 

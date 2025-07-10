@@ -1,6 +1,8 @@
 import configparser
 import json
+import os
 from copy import deepcopy
+from pathlib import Path
 
 import pytest
 import yaml
@@ -39,6 +41,16 @@ def test_file_finder(tmp_path):
 
     with pytest.MonkeyPatch.context() as context:
         context.setattr(__main__, "__file__", file_python)
+
+        with pytest.raises(FileNotFoundError):
+            find_file("wrongfile.ext")
+
+        assert find_file(fname) == file_config
+    ################################################################
+    # test the jupyter notebook part
+    with pytest.MonkeyPatch.context() as context:
+        context.delattr(__main__, "__file__", AttributeError)
+        context.setattr(os.path, "abspath", lambda _: Path(tmp_path / "src"))
 
         with pytest.raises(FileNotFoundError):
             find_file("wrongfile.ext")
