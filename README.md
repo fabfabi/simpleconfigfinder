@@ -33,17 +33,17 @@ Instead of defining global variables, just define these parameters in the pyproj
 To get the key for your `default_config` just call
 
 ```python
-find_configuration("pyproject.toml", ["tool", "some_tool", "default_config"])
+find_configuration("pyproject.toml", ["tool", "some_tool", "default_config", "important_key"])
 ```
 
-    {"important_key" : "some_value"}    
+    "some_value"
 
 and respectively for your `special_config` use
 
 ```python
-find_configuration("pyproject.toml", ["tool", "some_tool", "special_config"])
+find_configuration("pyproject.toml", ["tool", "some_tool", "special_config", "important_key"]])
 ```
 
-    {"important_key" : "another_value"}    
+    "another_value"
 
 [Link to full documentation](https://fabfabi.github.io/simpleconfigfinder/)
