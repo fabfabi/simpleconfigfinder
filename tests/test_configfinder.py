@@ -49,13 +49,22 @@ def test_file_finder(tmp_path):
     ################################################################
     # test the jupyter notebook part
     with pytest.MonkeyPatch.context() as context:
-        context.delattr(__main__, "__file__", AttributeError)
+        context.delattr(__main__, "__file__", True)
         context.setattr(os.path, "abspath", lambda _: Path(tmp_path / "src"))
 
         with pytest.raises(FileNotFoundError):
             find_file("wrongfile.ext")
 
         assert find_file(fname) == file_config
+    ################################################################
+    # test the strategy 'cwd
+    with pytest.MonkeyPatch.context() as context:
+        context.setattr(os, "getcwd", lambda: str(tmp_path / "src"))
+
+        with pytest.raises(FileNotFoundError):
+            find_file("wrongfile.ext", strategy="cwd")
+
+        assert find_file(fname, strategy="cwd") == file_config
 
 
 def test_config_walker():

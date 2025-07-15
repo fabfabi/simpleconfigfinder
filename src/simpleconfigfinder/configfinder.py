@@ -16,20 +16,31 @@ class ConfigNotFound(Exception):
     pass
 
 
-def find_file(config_fname: str | PurePath) -> PurePath:
+def find_file(config_fname: str | PurePath, strategy: str = "__main__") -> PurePath:
     """finds the configuration file by checking every parent directory.
 
+    Strategy __main__:
     Starts with the directory of the currently executed file (`__main__.__file__`) and searches upstream.
     For Jupyter Notebooks, `os.path.abspath("")` will be returned instead.
 
-    Args:
-        config_fname: the name of the configuration file"""
+    Strategy cwd:
+    starts with os.cwd()
 
-    try:
-        directory = Path(__main__.__file__).parent
-    except AttributeError:
-        # above version does not work for *.ipynb
-        directory = Path(os.path.abspath(""))
+
+    Args:
+        config_fname: the name of the configuration file
+        strategy: can bei either __main__ or cwd"""
+
+    if strategy == "__main__":
+        try:
+            directory = Path(__main__.__file__).parent
+        except AttributeError:
+            # above version does not work for *.ipynb
+            directory = Path(os.path.abspath(""))
+    elif strategy == "cwd":
+        directory = Path(os.getcwd())
+    else:
+        raise ValueError(f"unknown strategy {strategy}")
 
     while directory.parent != directory:
         if (directory / config_fname).exists():
@@ -41,7 +52,7 @@ def find_file(config_fname: str | PurePath) -> PurePath:
     raise FileNotFoundError(f"'{config_fname}' was not found")
 
 
-def configparser_to_dict(configuration: configparser.ConfigParser) -> Dict[str, str]:
+def configparser_to_dict(configuration: configparser.ConfigParser) -> Dict[str, Any]:
     """converts a configparser element (handling ini files) to a dictionary
 
     Example:
@@ -163,6 +174,7 @@ def config_finder(
     sub_config_keys: Optional[list[str]] = None,
     raise_error=True,
     additional_readers: Optional[Dict[str, Callable[[Any], Dict[str, Any]]]] = None,
+    strategy: str = "__main__",
 ) -> Dict[str, Any]:
     """goes upstream from the currently executed file and finds the file `config_fname` and returns the `sub_config_keys`
 
@@ -186,6 +198,7 @@ def config_finder(
         sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.
         raise_error: if errors will be raised in case any of the files are not found
         additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary. For a code example see [Other Readers](index.md#other-readers)
+        strategy: will be passed to `find_file` to determine the initial file
 
     Returns:
         "filtered" Dictionary, where teh sub_config_keys where already applied. I.e. config[sub_config_keys[0]][sub_config_keys[1]]...
@@ -212,7 +225,7 @@ def config_finder(
     reader = reader_dictionary[extension]
 
     try:
-        fname = find_file(config_fname)  # type: ignore since list values are handled above
+        fname = find_file(config_fname, strategy=strategy)  # type: ignore since list values are handled above
     except FileNotFoundError as err:
         if raise_error:
             raise err
@@ -233,6 +246,7 @@ def multi_config_finder(
     sub_config_keys: Optional[list[str]] = None,
     raise_error=True,
     additional_readers: Optional[Dict[str, Callable[[Any], Dict[str, Any]]]] = None,
+    strategy: str = "__main__",
 ) -> Dict[str, Any]:
     """goes upstream from the currently executed file and finds the file `config_fname` and returns the `sub_config_keys`
 
@@ -246,6 +260,7 @@ def multi_config_finder(
         sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.
         raise_error: if errors will be raised in case any of the files are not found
         additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary. For a code example see [Other Readers](index.md#other-readers)
+        strategy: will be passed to `find_file`
     """
 
     configs_all = [
@@ -253,6 +268,7 @@ def multi_config_finder(
             config_fname=file,
             raise_error=raise_error,
             additional_readers=additional_readers,
+            strategy=strategy,
         )
         for file in config_fname
     ]
