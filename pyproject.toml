@@ -1,6 +1,6 @@
 [project]
 name = "simpleconfigfinder"
-version = "0.3.3"
+version = "0.4.0"
 description = "Minimalistic configuration finder with standard Python libraries."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -11,15 +11,13 @@ dependencies = []
 dev = [
     "ipykernel>=6.29.5",
     "ruff>=0.12.2",
-]
-docs = [
-    "mkdocs>=1.6.1",
-    "mkdocstrings[python]>=0.29.1",
-]
-test = [
     "pytest>=8.4.1",
     "pyyaml>=6.0.2",
+    "mkdocs>=1.6.1",
+    "mkdocstrings[python]>=0.29.1",
+    "pre-commit>=4.2.0",
 ]
+
 
 [tool.some_tool]
 key1 = "some_value_1"
@@ -48,3 +46,9 @@ module-root = "src"
 Homepage = "https://fabfabi.github.io/simpleconfigfinder/"
 Issues = "https://github.com/fabfabi/simpleconfigfinder/issues"
 Repository = "https://github.com/fabfabi/simpleconfigfinder"
+
+
+[tool.pyright]
+# ...
+venvPath = "."
+venv = ".venv"
