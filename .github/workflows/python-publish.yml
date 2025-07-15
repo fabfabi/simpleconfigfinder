@@ -16,6 +16,39 @@ permissions:
   contents: read
 
 jobs:
+  build:
+    name: continuous-integration
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - "3.11"
+          - "3.12"
+          - "3.13"
+          - "3.14"
+
+    steps:
+      - name: Install the code linting and formatting tool Ruff
+        run: pipx install ruff
+      - name: Lint code with Ruff
+        run: ruff check --output-format=github --target-version=py39
+      - name: Check code formatting with Ruff
+        run: ruff format --diff --target-version=py39
+        continue-on-error: false
+      - uses: actions/checkout@v4
+
+      - name: Install uv and set the python version
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: sync test environment
+        run: uv sync --group dev
+      - name: Run tests
+        # For example, using `pytest`
+        run: uv run pytest
+      - name: Deploy Documentation
+        # For example, using `pytest`
+        run: uv run mkdocs gh-deploy
   release-build:
     runs-on: ubuntu-latest
 
