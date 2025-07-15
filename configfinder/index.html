@@ -306,18 +306,7 @@ Or the Doctests are rendered properly-->
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 68</span>
-<span class="normal"> 69</span>
-<span class="normal"> 70</span>
-<span class="normal"> 71</span>
-<span class="normal"> 72</span>
-<span class="normal"> 73</span>
-<span class="normal"> 74</span>
-<span class="normal"> 75</span>
-<span class="normal"> 76</span>
-<span class="normal"> 77</span>
-<span class="normal"> 78</span>
-<span class="normal"> 79</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 79</span>
 <span class="normal"> 80</span>
 <span class="normal"> 81</span>
 <span class="normal"> 82</span>
@@ -373,7 +362,18 @@ Or the Doctests are rendered properly-->
 <span class="normal">132</span>
 <span class="normal">133</span>
 <span class="normal">134</span>
-<span class="normal">135</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">combine_dictionaries</span><span class="p">(</span><span class="n">dict_a</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">dict_b</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">combine_dictionaries</span><span class="p">(</span><span class="n">dict_a</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">dict_b</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;combine two dictionaries on a granular level. The entries of `dict_a` always have priority over entries of `dict_b`.</span>
 
 <span class="sd">    !!! caution</span>
@@ -460,6 +460,7 @@ Or the Doctests are rendered properly-->
     <span class="n">sub_config_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">additional_readers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;__main__&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
 
@@ -524,6 +525,16 @@ some_key = &quot;some_value&quot;
                 <p>dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary. For a code example see <a href="../#other-readers">Other Readers</a></p>
               </div>
             </li>
+            <li>
+              <b><code>strategy</code></b>
+                  (<code><span title="str">str</span></code>, default:
+                      <code>&#39;__main__&#39;</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>will be passed to <code>find_file</code> to determine the initial file</p>
+              </div>
+            </li>
         </ul>
       </td>
     </tr>
@@ -555,18 +566,7 @@ some_key = &quot;some_value&quot;
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">161</span>
-<span class="normal">162</span>
-<span class="normal">163</span>
-<span class="normal">164</span>
-<span class="normal">165</span>
-<span class="normal">166</span>
-<span class="normal">167</span>
-<span class="normal">168</span>
-<span class="normal">169</span>
-<span class="normal">170</span>
-<span class="normal">171</span>
-<span class="normal">172</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">172</span>
 <span class="normal">173</span>
 <span class="normal">174</span>
 <span class="normal">175</span>
@@ -622,11 +622,25 @@ some_key = &quot;some_value&quot;
 <span class="normal">225</span>
 <span class="normal">226</span>
 <span class="normal">227</span>
-<span class="normal">228</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_finder</span><span class="p">(</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_finder</span><span class="p">(</span>
     <span class="n">config_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PurePath</span><span class="p">,</span>
     <span class="n">sub_config_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">additional_readers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">strategy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;__main__&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;goes upstream from the currently executed file and finds the file `config_fname` and returns the `sub_config_keys`</span>
 
@@ -650,6 +664,7 @@ some_key = &quot;some_value&quot;
 <span class="sd">        sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.</span>
 <span class="sd">        raise_error: if errors will be raised in case any of the files are not found</span>
 <span class="sd">        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {&quot;yaml&quot;: yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary. For a code example see [Other Readers](index.md#other-readers)</span>
+<span class="sd">        strategy: will be passed to `find_file` to determine the initial file</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        &quot;filtered&quot; Dictionary, where teh sub_config_keys where already applied. I.e. config[sub_config_keys[0]][sub_config_keys[1]]...</span>
@@ -676,7 +691,7 @@ some_key = &quot;some_value&quot;
     <span class="n">reader</span> <span class="o">=</span> <span class="n">reader_dictionary</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">)</span>  <span class="c1"># type: ignore since list values are handled above</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="n">strategy</span><span class="p">)</span>  <span class="c1"># type: ignore since list values are handled above</span>
     <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">raise_error</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">err</span>
@@ -750,18 +765,7 @@ some_key = &quot;some_value&quot;
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">138</span>
-<span class="normal">139</span>
-<span class="normal">140</span>
-<span class="normal">141</span>
-<span class="normal">142</span>
-<span class="normal">143</span>
-<span class="normal">144</span>
-<span class="normal">145</span>
-<span class="normal">146</span>
-<span class="normal">147</span>
-<span class="normal">148</span>
-<span class="normal">149</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">149</span>
 <span class="normal">150</span>
 <span class="normal">151</span>
 <span class="normal">152</span>
@@ -770,7 +774,18 @@ some_key = &quot;some_value&quot;
 <span class="normal">155</span>
 <span class="normal">156</span>
 <span class="normal">157</span>
-<span class="normal">158</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_walker</span><span class="p">(</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">config_walker</span><span class="p">(</span>
     <span class="n">configuration_dictionary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">sub_config_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;goes upstream from the currently executed file and finds the file `config_fname` and returns the `sub_config_keys`</span>
@@ -855,7 +870,7 @@ some_key = &quot;some_value&quot;
       <td class="field-body">
         <ul class="first simple">
             <li>
-                  <code><span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="str">str</span>]</code>
+                  <code><span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>]</code>
               –
               <div class="doc-md-description">
                 <p>dictionary of entries</p>
@@ -869,18 +884,7 @@ some_key = &quot;some_value&quot;
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span>
-<span class="normal">48</span>
-<span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span>
-<span class="normal">55</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">55</span>
 <span class="normal">56</span>
 <span class="normal">57</span>
 <span class="normal">58</span>
@@ -890,7 +894,18 @@ some_key = &quot;some_value&quot;
 <span class="normal">62</span>
 <span class="normal">63</span>
 <span class="normal">64</span>
-<span class="normal">65</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">configparser_to_dict</span><span class="p">(</span><span class="n">configuration</span><span class="p">:</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">configparser_to_dict</span><span class="p">(</span><span class="n">configuration</span><span class="p">:</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;converts a configparser element (handling ini files) to a dictionary</span>
 
 <span class="sd">    Example:</span>
@@ -926,14 +941,17 @@ some_key = &quot;some_value&quot;
 
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;__main__&#39;</span><span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
 
         <p>finds the configuration file by checking every parent directory.</p>
-<p>Starts with the directory of the currently executed file (<code>__main__.__file__</code>) and searches upstream.
+<p>Strategy <strong>main</strong>:
+Starts with the directory of the currently executed file (<code>__main__.__file__</code>) and searches upstream.
 For Jupyter Notebooks, <code>os.path.abspath("")</code> will be returned instead.</p>
+<p>Strategy cwd:
+starts with os.cwd()</p>
 
 
 <table class="field-list">
@@ -952,6 +970,16 @@ For Jupyter Notebooks, <code>os.path.abspath("")</code> will be returned instead
               –
               <div class="doc-md-description">
                 <p>the name of the configuration file</p>
+              </div>
+            </li>
+            <li>
+              <b><code>strategy</code></b>
+                  (<code><span title="str">str</span></code>, default:
+                      <code>&#39;__main__&#39;</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>can bei either <strong>main</strong> or cwd</p>
               </div>
             </li>
         </ul>
@@ -984,20 +1012,42 @@ For Jupyter Notebooks, <code>os.path.abspath("")</code> will be returned instead
 <span class="normal">38</span>
 <span class="normal">39</span>
 <span class="normal">40</span>
-<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PurePath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PurePath</span><span class="p">:</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">find_file</span><span class="p">(</span><span class="n">config_fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">PurePath</span><span class="p">,</span> <span class="n">strategy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;__main__&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PurePath</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;finds the configuration file by checking every parent directory.</span>
 
+<span class="sd">    Strategy __main__:</span>
 <span class="sd">    Starts with the directory of the currently executed file (`__main__.__file__`) and searches upstream.</span>
 <span class="sd">    For Jupyter Notebooks, `os.path.abspath(&quot;&quot;)` will be returned instead.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        config_fname: the name of the configuration file&quot;&quot;&quot;</span>
+<span class="sd">    Strategy cwd:</span>
+<span class="sd">    starts with os.cwd()</span>
 
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">__main__</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
-    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-        <span class="c1"># above version does not work for *.ipynb</span>
-        <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">))</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config_fname: the name of the configuration file</span>
+<span class="sd">        strategy: can bei either __main__ or cwd&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">__main__</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="c1"># above version does not work for *.ipynb</span>
+            <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">&quot;cwd&quot;</span><span class="p">:</span>
+        <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unknown strategy </span><span class="si">{</span><span class="n">strategy</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">while</span> <span class="n">directory</span><span class="o">.</span><span class="n">parent</span> <span class="o">!=</span> <span class="n">directory</span><span class="p">:</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">directory</span> <span class="o">/</span> <span class="n">config_fname</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
@@ -1026,6 +1076,7 @@ For Jupyter Notebooks, <code>os.path.abspath("")</code> will be returned instead
     <span class="n">sub_config_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">additional_readers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;__main__&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
 
@@ -1082,6 +1133,16 @@ This function first combines all files and afterwards applies the sub_config_key
                 <p>dictionary to define for file extensions which readers will be used (e.g. for yaml via  {"yaml": yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary. For a code example see <a href="../#other-readers">Other Readers</a></p>
               </div>
             </li>
+            <li>
+              <b><code>strategy</code></b>
+                  (<code><span title="str">str</span></code>, default:
+                      <code>&#39;__main__&#39;</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>will be passed to <code>find_file</code></p>
+              </div>
+            </li>
         </ul>
       </td>
     </tr>
@@ -1090,20 +1151,7 @@ This function first combines all files and afterwards applies the sub_config_key
 
             <details class="quote">
               <summary>Source code in <code>src\simpleconfigfinder\configfinder.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">231</span>
-<span class="normal">232</span>
-<span class="normal">233</span>
-<span class="normal">234</span>
-<span class="normal">235</span>
-<span class="normal">236</span>
-<span class="normal">237</span>
-<span class="normal">238</span>
-<span class="normal">239</span>
-<span class="normal">240</span>
-<span class="normal">241</span>
-<span class="normal">242</span>
-<span class="normal">243</span>
-<span class="normal">244</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">244</span>
 <span class="normal">245</span>
 <span class="normal">246</span>
 <span class="normal">247</span>
@@ -1126,11 +1174,28 @@ This function first combines all files and afterwards applies the sub_config_key
 <span class="normal">264</span>
 <span class="normal">265</span>
 <span class="normal">266</span>
-<span class="normal">267</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multi_config_finder</span><span class="p">(</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multi_config_finder</span><span class="p">(</span>
     <span class="n">config_fname</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">PurePath</span><span class="p">],</span>
     <span class="n">sub_config_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">additional_readers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">strategy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;__main__&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;goes upstream from the currently executed file and finds the file `config_fname` and returns the `sub_config_keys`</span>
 
@@ -1144,6 +1209,7 @@ This function first combines all files and afterwards applies the sub_config_key
 <span class="sd">        sub_config_keys: A list of the keys to identify the sub-configuration. returns the full config if nothing is provided.</span>
 <span class="sd">        raise_error: if errors will be raised in case any of the files are not found</span>
 <span class="sd">        additional_readers: dictionary to define for file extensions which readers will be used (e.g. for yaml via  {&quot;yaml&quot;: yaml.safe_load}). In general this works for any function that can take a file name as string or PurePath and return a dictionary. For a code example see [Other Readers](index.md#other-readers)</span>
+<span class="sd">        strategy: will be passed to `find_file`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">configs_all</span> <span class="o">=</span> <span class="p">[</span>
@@ -1151,6 +1217,7 @@ This function first combines all files and afterwards applies the sub_config_key
             <span class="n">config_fname</span><span class="o">=</span><span class="n">file</span><span class="p">,</span>
             <span class="n">raise_error</span><span class="o">=</span><span class="n">raise_error</span><span class="p">,</span>
             <span class="n">additional_readers</span><span class="o">=</span><span class="n">additional_readers</span><span class="p">,</span>
+            <span class="n">strategy</span><span class="o">=</span><span class="n">strategy</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">config_fname</span>
     <span class="p">]</span>
