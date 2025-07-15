@@ -41,9 +41,18 @@ find_configuration("pyproject.toml", ["tool", "some_tool", "default_config", "im
 and respectively for your `special_config` use
 
 ```python
-find_configuration("pyproject.toml", ["tool", "some_tool", "special_config", "important_key"]])
+find_configuration("pyproject.toml", ["tool", "some_tool", "special_config", "important_key"])
 ```
 
     "another_value"
+
+Or you could get one full set of the configuration as dictionary via
+
+```python
+find_configuration("pyproject.toml", ["tool", "some_tool", "special_config"])
+```
+
+    { "important_key" : "another_value" }
+
 
 [Link to full documentation](https://fabfabi.github.io/simpleconfigfinder/)
