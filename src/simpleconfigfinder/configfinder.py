@@ -16,8 +16,28 @@ class ConfigNotFound(Exception):
     pass
 
 
+def get_starting_file(strategy: str = "__main__") -> Path:
+    """determines the starting file for the identification of the configuration file
+
+    Args:
+        config_fname: the name of the configuration file"""
+
+    if strategy == "__main__":
+        try:
+            directory = Path(__main__.__file__).parent
+        except AttributeError:
+            # above version does not work for *.ipynb
+            directory = Path(os.path.abspath(""))
+    elif strategy == "cwd":
+        directory = Path(os.getcwd())
+    else:
+        raise ValueError(f"unknown strategy {strategy}")
+
+    return directory
+
+
 def find_file(config_fname: str | PurePath, strategy: str = "__main__") -> PurePath:
-    """finds the configuration file by checking every parent directory.
+    """finds the configuration file by checking every parent directory from the starting file (as determined by get_starting_file)
 
     Strategy __main__:
     Starts with the directory of the currently executed file (`__main__.__file__`) and searches upstream.
@@ -31,16 +51,7 @@ def find_file(config_fname: str | PurePath, strategy: str = "__main__") -> PureP
         config_fname: the name of the configuration file
         strategy: can bei either __main__ or cwd"""
 
-    if strategy == "__main__":
-        try:
-            directory = Path(__main__.__file__).parent
-        except AttributeError:
-            # above version does not work for *.ipynb
-            directory = Path(os.path.abspath(""))
-    elif strategy == "cwd":
-        directory = Path(os.getcwd())
-    else:
-        raise ValueError(f"unknown strategy {strategy}")
+    directory = get_starting_file(strategy)
 
     while directory.parent != directory:
         if (directory / config_fname).exists():

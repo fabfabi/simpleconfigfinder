@@ -57,7 +57,7 @@ def test_file_finder(tmp_path):
 
         assert find_file(fname) == file_config
     ################################################################
-    # test the strategy 'cwd
+    # test the strategy 'cwd'
     with pytest.MonkeyPatch.context() as context:
         context.setattr(os, "getcwd", lambda: str(tmp_path / "src"))
 
