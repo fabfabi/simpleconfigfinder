@@ -169,6 +169,38 @@ def config_walker(
     return configuration_dictionary
 
 
+def config_reader(
+    fname: str | PurePath,
+    additional_readers: Optional[Dict[str, Callable[[Any], Dict[str, Any]]]] = None,
+):
+    """can read `toml`, `json` `ini` and custom extensions via additional_readers
+
+    Args:
+        fname: Name and Path of the configuration file
+        additional_readers: Dictionary with additional readers for non-standard extensions"""
+    # cut the leading dot
+    extension = Path(fname).suffix[1:].lower()
+
+    def ini_reader(file) -> Dict:
+        """small unitility function to read ini files"""
+        cfg = ConfigParser()
+        cfg.read(file)
+        return configparser_to_dict(cfg)
+
+    reader_dictionary = {"toml": tomllib.load, "json": json.load, "ini": ini_reader}
+    if additional_readers:
+        reader_dictionary.update(additional_readers)
+
+    if extension not in reader_dictionary:
+        raise NotImplementedError(
+            f"config finder not implmeneted for '{extension}'. Use any of '{reader_dictionary.keys()}'"
+        )
+
+    reader = reader_dictionary[extension]
+    with open(fname, "rb") as file:
+        return reader(file)
+
+
 def config_finder(
     config_fname: str | PurePath,
     sub_config_keys: Optional[list[str]] = None,
@@ -204,26 +236,6 @@ def config_finder(
         "filtered" Dictionary, where teh sub_config_keys where already applied. I.e. config[sub_config_keys[0]][sub_config_keys[1]]...
     """
 
-    # cut the leading dot
-    extension = Path(config_fname).suffix[1:].lower()
-
-    def ini_reader(file) -> Dict:
-        """small unitility function to read ini files"""
-        cfg = ConfigParser()
-        cfg.read(file)
-        return configparser_to_dict(cfg)
-
-    reader_dictionary = {"toml": tomllib.load, "json": json.load, "ini": ini_reader}
-    if additional_readers:
-        reader_dictionary.update(additional_readers)
-
-    if extension not in reader_dictionary:
-        raise NotImplementedError(
-            f"config finder not implmeneted for '{extension}'. Use any of '{reader_dictionary.keys()}'"
-        )
-
-    reader = reader_dictionary[extension]
-
     try:
         fname = find_file(config_fname, strategy=strategy)  # type: ignore since list values are handled above
     except FileNotFoundError as err:
@@ -232,8 +244,7 @@ def config_finder(
         else:
             return {}
 
-    with open(fname, "rb") as file:
-        configuration = reader(file)
+    configuration = config_reader(fname, additional_readers=additional_readers)
 
     if sub_config_keys is None:
         return configuration
