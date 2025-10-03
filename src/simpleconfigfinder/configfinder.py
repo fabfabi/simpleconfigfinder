@@ -10,7 +10,7 @@ from typing import Any, Callable, Dict, Optional
 import __main__
 
 
-class ConfigNotFound(Exception):
+class ErrorConfigNotFound(Exception):
     """will be raised when the given keys for the sub-configuration do not exist in the configuration file"""
 
     pass
@@ -20,7 +20,7 @@ def get_starting_file(strategy: str = "__main__") -> Path:
     """determines the starting file for the identification of the configuration file
 
     Args:
-        config_fname: the name of the configuration file"""
+        strategy: the strategy for how to go up from the current path"""
 
     if strategy == "__main__":
         try:
@@ -175,7 +175,9 @@ def config_walker(
         if key in configuration_dictionary:
             configuration_dictionary = configuration_dictionary[key]
         else:
-            raise ConfigNotFound(f"configuration {sub_config_keys[: i + 1]} not found")
+            raise ErrorConfigNotFound(
+                f"configuration {sub_config_keys[: i + 1]} not found"
+            )
 
     return configuration_dictionary
 
@@ -184,11 +186,12 @@ def config_reader(
     fname: str | PurePath,
     additional_readers: Optional[Dict[str, Callable[[Any], Dict[str, Any]]]] = None,
 ):
-    """can read `toml`, `json` `ini` and custom extensions via additional_readers
+    """can read `toml`, `json`, `ini` and custom extensions via additional_readers
 
     Args:
         fname: Name and Path of the configuration file
         additional_readers: Dictionary with additional readers for non-standard extensions"""
+
     # cut the leading dot
     extension = Path(fname).suffix[1:].lower()
 
@@ -215,7 +218,7 @@ def config_reader(
 def config_finder(
     config_fname: str | PurePath,
     sub_config_keys: Optional[list[str]] = None,
-    raise_error=True,
+    raise_error: bool = True,
     additional_readers: Optional[Dict[str, Callable[[Any], Dict[str, Any]]]] = None,
     strategy: str = "__main__",
 ) -> Dict[str, Any]:
@@ -266,7 +269,7 @@ def config_finder(
 def multi_config_finder(
     config_fname: list[str] | list[PurePath],
     sub_config_keys: Optional[list[str]] = None,
-    raise_error=True,
+    raise_error: bool = True,
     additional_readers: Optional[Dict[str, Callable[[Any], Dict[str, Any]]]] = None,
     strategy: str = "__main__",
 ) -> Dict[str, Any]:

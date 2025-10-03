@@ -9,7 +9,7 @@ import yaml
 
 import __main__
 from simpleconfigfinder.configfinder import (
-    ConfigNotFound,
+    ErrorConfigNotFound,
     combine_dictionaries,
     config_finder,
     config_walker,
@@ -78,10 +78,10 @@ def test_config_walker():
         "d": 22,
     }
 
-    with pytest.raises(ConfigNotFound):
+    with pytest.raises(ErrorConfigNotFound):
         config_walker(dictionary_test, ["a", "b3"])
 
-    with pytest.raises(ConfigNotFound):
+    with pytest.raises(ErrorConfigNotFound):
         config_walker(dictionary_test, ["a", "b3"])
 
 

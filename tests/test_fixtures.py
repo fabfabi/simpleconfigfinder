@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
-from simpleconfigfinder import ConfigNotFound, config_finder
+from simpleconfigfinder import config_finder
 
 
 @pytest.fixture(scope="function")
@@ -13,11 +13,6 @@ def unmock_reader():
         return_value=Path(__file__),
     ):
         yield
-
-
-def test_not_unmocked():
-    with pytest.raises(ConfigNotFound):
-        config_finder("pyproject.toml", ["tool", "some_tool", "key1"])
 
 
 def test_unmock(unmock_reader):

@@ -35,3 +35,4 @@ plugins:
 nav:
   - Overview: 'index.md'
   - API Reference: 'configfinder.md'
+  - Fixtures for Testing : 'testing.md'
