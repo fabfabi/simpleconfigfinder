@@ -1,6 +1,9 @@
 """This is a small package with utility functions to find and handle configuration files that are stored upstream from the code."""
 
 from simpleconfigfinder.configfinder import (
+    ErrorConfigNotFound as ConfigNotFound,  # add for downward compatibility  # noqa: F401
+)
+from simpleconfigfinder.configfinder import (
     ErrorConfigNotFound as ErrorConfigNotFound,
 )
 from simpleconfigfinder.configfinder import (
