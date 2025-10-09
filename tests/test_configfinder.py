@@ -17,6 +17,7 @@ from simpleconfigfinder.configfinder import (
     find_file,
     multi_config_finder,
 )
+from simpleconfigfinder.configfinder import ErrorConfigNotFound as ConfigNotFound
 
 dictionary_test = {
     "a": {
@@ -80,6 +81,12 @@ def test_config_walker():
 
     with pytest.raises(ErrorConfigNotFound):
         config_walker(dictionary_test, ["a", "b3"])
+
+    ####################################
+    # to test downward compatibility for the renaming of the test
+    with pytest.raises(ConfigNotFound):
+        config_walker(dictionary_test, ["a", "b3"])
+    ####################################
 
     with pytest.raises(ErrorConfigNotFound):
         config_walker(dictionary_test, ["a", "b3"])
