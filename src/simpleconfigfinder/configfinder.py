@@ -52,12 +52,14 @@ def find_file(config_fname: str | PurePath, strategy: str = "__main__") -> PureP
         strategy: can bei either __main__ or cwd"""
 
     directory = get_starting_file(strategy)
+    directory_last = None
 
-    while directory.parent != directory:
+    while directory != directory_last:
         if (directory / config_fname).exists():
             return directory / config_fname
 
         # go one up
+        directory_last = directory
         directory = directory.parent
 
     raise FileNotFoundError(f"'{config_fname}' was not found")
